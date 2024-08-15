@@ -19,8 +19,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-      <NavbarComponent></NavbarComponent>
-      <SidebarComponent></SidebarComponent>
         {children}</body>
     </html>
   );

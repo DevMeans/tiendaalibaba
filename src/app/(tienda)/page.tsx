@@ -1,5 +1,4 @@
-import NavbarComponent from './components/navbar/Navbar';
-import CardProductComponent from './components/card-item/CardProduct';
+import CardProductComponent from '../components/card-item/CardProduct';
 
 export default function Home() {
   return (

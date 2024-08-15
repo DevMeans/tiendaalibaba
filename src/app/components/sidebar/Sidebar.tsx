@@ -69,7 +69,7 @@ export default function SidebarComponent() {
 
                         {
                             array.map((r) => (
-                                <div className="grid grid-cols-3 mt-4">
+                                <div className="grid grid-cols-3 mt-4" key={r}>
                                     <div className="text-xl font-normal">
                                         {r}
                                     </div>
