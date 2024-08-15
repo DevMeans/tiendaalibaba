@@ -82,7 +82,7 @@ export default function SidebarComponent() {
                                                 <button className="absolute left-0 flex items-center justify-center w-8 h-8 text-lg font-bold border rounded-full hover:bg-gray-200 focus:outline-none">
                                                     -
                                                 </button>
-                                                <input type="number" value={0} className="w-full text-center focus:outline-none" />
+                                                <input key={`${r}s`} type="number" defaultValue={0} className="w-full text-center focus:outline-none" />
                                                 <button className="absolute right-0 flex items-center justify-center w-8 h-8 text-lg font-bold border rounded-full hover:bg-gray-200 focus:outline-none">
                                                     +
                                                 </button>
