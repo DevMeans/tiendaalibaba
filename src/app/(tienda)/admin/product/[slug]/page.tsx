@@ -1,5 +1,4 @@
-import CheckBoxComponent from "@/app/components/checkbox/CheckBox";
-import ImageUploader from "@/app/components/uploading/Uploading";
+
 import { ProductForm } from "./ProductForm";
 
 interface Props {
@@ -15,7 +14,10 @@ export default function ProductBySlug({ params }: Props) {
         <div className="flex items-center justify-center p-12">
 
             <div className="mx-auto w-full max-w-[550px]">
-                <ProductForm product={ } size={ } color={ } />
+                {
+                    /**<ProductForm product={ } size={ } color={ } /> */
+                }
+                
             </div>
         </div>
     );
