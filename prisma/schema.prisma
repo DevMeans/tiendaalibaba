@@ -14,8 +14,8 @@ datasource db {
 }
 
 model Category {
-  id   BigInt @id @default(autoincrement())
-  name String
+  id   String @id @default(uuid())
+  name String @unique
 
   products Product[]
 }
@@ -28,12 +28,12 @@ enum UserRole {
 }
 
 model Product {
-  id          BigInt    @id @default(autoincrement())
-  name        String
+  id          String    @id @default(uuid())
+  name        String    @unique
   description String?
   slug        String?   @unique
   category    Category? @relation(fields: [categoryId], references: [id])
-  categoryId  BigInt?
+  categoryId  String?
 
   variants   ProductVariant[]
   promotions ProductPromotion[]
@@ -43,13 +43,13 @@ model Product {
 }
 
 model ProductVariant {
-  id        BigInt  @id @default(autoincrement())
+  id        String  @id @default(uuid())
   product   Product @relation(fields: [productId], references: [id])
-  productId BigInt
+  productId String
   color     Color?  @relation(fields: [colorId], references: [id])
-  colorId   BigInt?
+  colorId   String?
   size      Size?   @relation(fields: [sizeId], references: [id])
-  sizeId    BigInt?
+  sizeId    String?
   price     Decimal
   stock     Int
   imageUrl  String?
@@ -60,49 +60,49 @@ model ProductVariant {
 }
 
 model Color {
-  id      BigInt  @id @default(autoincrement())
-  name    String
-  hexCode String?
+  id      String @id @default(uuid())
+  name    String @unique
+  hexCode String
 
   variants ProductVariant[]
 }
 
 model Size {
-  id   BigInt @id @default(autoincrement())
-  name String
+  id   String @id @default(uuid())
+  name String @unique
 
   variants ProductVariant[]
 }
 
 model ProductImage {
-  id        BigInt  @id @default(autoincrement())
+  id        String  @id @default(uuid())
   product   Product @relation(fields: [productId], references: [id])
-  productId BigInt
+  productId String
   imageUrl  String
 }
 
 model Tag {
-  id   BigInt @id @default(autoincrement())
+  id   String @id @default(uuid())
   name String @unique
 
   productTags ProductTag[]
 }
 
 model ProductTag {
-  id        BigInt  @id @default(autoincrement())
+  id        String  @id @default(uuid())
   product   Product @relation(fields: [productId], references: [id])
-  productId BigInt
+  productId String
   tag       Tag     @relation(fields: [tagId], references: [id])
-  tagId     BigInt
+  tagId     String
 }
 
 model Order {
-  id               BigInt   @id @default(autoincrement())
+  id               String   @id @default(uuid())
   orderDate        DateTime @default(now())
   customerName     String
   customerEmail    String
   user             User?    @relation(fields: [userId], references: [id])
-  userId           BigInt?
+  userId           String?
   deliveryAddress  String
   phoneNumber      String
   notes            String?
@@ -112,16 +112,16 @@ model Order {
 }
 
 model OrderItem {
-  id               BigInt         @id @default(autoincrement())
+  id               String         @id @default(uuid())
   order            Order          @relation(fields: [orderId], references: [id])
-  orderId          BigInt
+  orderId          String
   productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
-  productVariantId BigInt
+  productVariantId String
   quantity         Int
 }
 
 model User {
-  id                 BigInt              @id @default(autoincrement())
+  id                 String              @id @default(uuid())
   name               String
   email              String              @unique
   password           String
@@ -134,7 +134,7 @@ model User {
 }
 
 model Promotion {
-  id                 BigInt   @id @default(autoincrement())
+  id                 String   @id @default(uuid())
   name               String
   description        String?
   discountPercentage Decimal
@@ -146,15 +146,15 @@ model Promotion {
 }
 
 model ProductPromotion {
-  id          BigInt    @id @default(autoincrement())
+  id          String    @id @default(uuid())
   product     Product   @relation(fields: [productId], references: [id])
-  productId   BigInt
+  productId   String
   promotion   Promotion @relation(fields: [promotionId], references: [id])
-  promotionId BigInt
+  promotionId String
 }
 
 model Supplier {
-  id          BigInt  @id @default(autoincrement())
+  id          String  @id @default(uuid())
   name        String
   contactInfo String?
 
@@ -162,49 +162,49 @@ model Supplier {
 }
 
 model Inventory {
-  id               BigInt         @id @default(autoincrement())
+  id               String         @id @default(uuid())
   productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
-  productVariantId BigInt
+  productVariantId String
   supplier         Supplier?      @relation(fields: [supplierId], references: [id])
-  supplierId       BigInt?
+  supplierId       String?
   purchaseDate     DateTime       @default(now())
   quantity         Int
   costPrice        Decimal
   warehouse        Warehouse?     @relation(fields: [warehouseId], references: [id])
-  warehouseId      BigInt?
+  warehouseId      String?
 }
 
 model Review {
-  id         BigInt   @id @default(autoincrement())
+  id         String   @id @default(uuid())
   product    Product  @relation(fields: [productId], references: [id])
-  productId  BigInt
+  productId  String
   user       User     @relation(fields: [userId], references: [id])
-  userId     BigInt
+  userId     String
   rating     Int
   comment    String?
   reviewDate DateTime @default(now())
 }
 
 model WarehouseTransfer {
-  id                BigInt         @id @default(autoincrement())
+  id                String         @id @default(uuid())
   productVariant    ProductVariant @relation(fields: [productVariantId], references: [id])
-  productVariantId  BigInt
+  productVariantId  String
   fromWarehouse     Warehouse?     @relation("FromWarehouse", fields: [fromWarehouseId], references: [id])
-  fromWarehouseId   BigInt?
+  fromWarehouseId   String?
   toWarehouse       Warehouse?     @relation("ToWarehouse", fields: [toWarehouseId], references: [id])
-  toWarehouseId     BigInt?
+  toWarehouseId     String?
   transferDate      DateTime       @default(now())
   quantity          Int
   requestedByUser   User?          @relation("RequestedByUser", fields: [requestedByUserId], references: [id])
-  requestedByUserId BigInt?
+  requestedByUserId String?
   approvedByUser    User?          @relation("ApprovedByUser", fields: [approvedByUserId], references: [id])
-  approvedByUserId  BigInt?
+  approvedByUserId  String?
   approvedAt        DateTime?
   status            String         @default("pending")
 }
 
 model Warehouse {
-  id       BigInt  @id @default(autoincrement())
+  id       String  @id @default(uuid())
   name     String
   location String?
 
