@@ -18,16 +18,17 @@ export const useUIStore = create<State>()((set) => ({
   closeSideMenu: () => set({ isSideOpenMenu: false }),
   openModal: (modaltype) => {
     if (modaltype == "color") {
-      console.log("hola");
       set({ isOpenModalColor: true });
-    } else {
+    }
+    if (modaltype == "size") {
       set({ isOpenModalSize: true });
     }
   },
   closeModal: (modaltype) => {
     if (modaltype == "color") {
       set({ isOpenModalColor: false });
-    } else {
+    }
+    if (modaltype == "size") {
       set({ isOpenModalSize: false });
     }
   },

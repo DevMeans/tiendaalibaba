@@ -28,7 +28,7 @@ export const ColorComponent = ({ colors }: Props) => {
             <div className="">
                 <span>Colores</span>
                 <button onClick={() => { openmodal('color'); setAction('new') }} className="ml-3 p-1 bg-black text-white rounded">
-                    Nuevo boton
+                    Nuevo Color
                 </button>
                 <table className="border mt-5 w-full">
                     <thead className="bg-black text-white text-left">
