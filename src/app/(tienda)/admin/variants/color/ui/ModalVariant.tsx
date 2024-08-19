@@ -5,7 +5,7 @@ import './modal.css'
 import { Color } from "@/interfaces/color.interface";
 import { useEffect, useState } from "react";
 import { createColor, editColor } from "@/actions/color";
-
+import { toast } from 'sonner'
 interface Props {
     selectedColor: Partial<Color> | null;
     action: string;
@@ -22,11 +22,9 @@ export default function ModalComponent({ selectedColor, action }: Props) {
             estado: "ACTIVO"
         }
     })
-
     const onSubmit = async (data: Color) => {
         console.log(action)
         const formData = new FormData();
-
         // TODO: HACER UNA CONDICIONAL CUANDO VIENE EL ID O NO //TRATAR EL ESTADO COMO STRING
         if (action == 'edit') {
             formData.append('id', data.id!)
@@ -34,25 +32,29 @@ export default function ModalComponent({ selectedColor, action }: Props) {
         formData.append('name', data.name)
         formData.append('hexCode', data.hexCode)
         formData.append('estado', data.estado)
-
         let resp;
         if (action == 'new') {
             resp = await createColor(formData)
             if (resp.ok) {
                 closeModal('color')
+                toast.info(resp.msg)
             }
             if (!resp.ok) {
                 setError(resp.msg)
+                toast.info(resp.msg)
             }
         }
         if (action == 'edit') {
             resp = await editColor(formData)
             console.log(resp)
             if (resp.ok) {
+
                 closeModal('color')
+                toast.info(resp.msg)
             }
             if (!resp.ok) {
                 setError(resp.msg)
+                toast.info(resp.msg)
             }
         }
     }

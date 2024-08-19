@@ -4,6 +4,7 @@ import ModalComponent from "./ui/ModalVariant";
 import { Color } from "@/interfaces/color.interface";
 import { useState } from "react";
 import { DeleteColor } from "@/actions/color";
+import { Toaster, toast } from 'sonner'
 interface Props {
     colors: Color[]
 }
@@ -17,11 +18,13 @@ export const ColorComponent = ({ colors }: Props) => {
         openmodal('color');
         setAction('edit')// Abre el modal
     };
-    const deleteColor = (id: string) => {
-        DeleteColor(id)
+    const deleteColor = async (id: string) => {
+        const resp = await DeleteColor(id)
+        toast.error(resp.msg)
     }
     return (
         <>
+            <Toaster richColors position="top-right" />
             <div className="">
                 <span>Colores</span>
                 <button onClick={() => { openmodal('color'); setAction('new') }} className="ml-3 p-1 bg-black text-white rounded">

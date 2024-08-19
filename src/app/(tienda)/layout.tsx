@@ -6,16 +6,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
 
     <>
       <NavbarComponent></NavbarComponent>
       <SidebarComponent></SidebarComponent>
-      <main>  
-      {children}
+      <main>
+        {children}
       </main>
       
-
 
     </>
   );
