@@ -4,24 +4,24 @@ import { useUIStore } from '@/store';
 import './modal.css'
 import { useEffect, useState } from "react";
 import { toast } from 'sonner'
-import { Size } from "@/interfaces/size.interface";
-import { createSize, editSize } from "@/actions/size";
+import { Category } from "@prisma/client";
+import { createCategory, editCategory } from "@/actions/category";
 interface Props {
-    selectedSize: Partial<Size> | null;
+    selectedCategory: Partial<Category> | null;
     action: string;
 }
 
-export default function ModalComponent({ selectedSize, action }: Props) {
-    const isSideModalOpen = useUIStore(state => state.isOpenModalSize)
+export default function ModalComponent({ selectedCategory, action }: Props) {
+    const isSideModalOpen = useUIStore(state => state.isOpenModalCategory)
     const closeModal = useUIStore(state => state.closeModal)
     const [error, setError] = useState('')
-    const { register, handleSubmit, reset, formState: { errors } } = useForm<Size>({
+    const { register, handleSubmit, reset, formState: { errors } } = useForm<Category>({
         defaultValues: {
             name: "",
             estado: "ACTIVO"
         }
     })
-    const onSubmit = async (data: Size) => {
+    const onSubmit = async (data: Category) => {
         console.log(action)
         const formData = new FormData();
         // TODO: HACER UNA CONDICIONAL CUANDO VIENE EL ID O NO //TRATAR EL ESTADO COMO STRING
@@ -32,9 +32,9 @@ export default function ModalComponent({ selectedSize, action }: Props) {
         formData.append('estado', data.estado)
         let resp;
         if (action == 'new') {
-            resp = await createSize(formData)
+            resp = await createCategory(formData)
             if (resp.ok) {
-                closeModal('size')
+                closeModal('category')
                 toast.info(resp.msg)
             }
             if (!resp.ok) {
@@ -43,11 +43,11 @@ export default function ModalComponent({ selectedSize, action }: Props) {
             }
         }
         if (action == 'edit') {
-            resp = await editSize(formData)
+            resp = await editCategory(formData)
             console.log(resp)
             if (resp.ok) {
 
-                closeModal('size')
+                closeModal('category')
                 toast.info(resp.msg)
             }
             if (!resp.ok) {
@@ -67,11 +67,11 @@ export default function ModalComponent({ selectedSize, action }: Props) {
                 reset({
                     name: "",
                 });
-            } else if (selectedSize) {
-                reset(selectedSize);
+            } else if (selectedCategory) {
+                reset(selectedCategory);
             }
         }
-    }, [isSideModalOpen, selectedSize, action, reset]);
+    }, [isSideModalOpen, selectedCategory, action, reset]);
 
     return (
         <div>
@@ -84,8 +84,8 @@ export default function ModalComponent({ selectedSize, action }: Props) {
                         <div className="modal-content py-4 text-left px-6">
                             {/* Title */}
                             <div className="flex justify-between items-center pb-3">
-                                <p className="text-2xl font-bold">Talla</p>
-                                <div className="modal-close cursor-pointer z-50" onClick={() => closeModal('size')}>
+                                <p className="text-2xl font-bold">Categoria</p>
+                                <div className="modal-close cursor-pointer z-50" onClick={() => closeModal('category')}>
                                     <svg className="fill-current text-black" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
                                         <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
                                     </svg>
@@ -98,7 +98,6 @@ export default function ModalComponent({ selectedSize, action }: Props) {
                             <form onSubmit={handleSubmit(onSubmit)}>
                                 <div className="my-5">
                                     <div className='mb-3'>
-
                                         <input
                                             type="text"
                                             className='w-full focus:outline-none border p-2'
@@ -118,7 +117,7 @@ export default function ModalComponent({ selectedSize, action }: Props) {
                                 <div className="flex justify-end pt-2">
                                     <button
                                         className="focus:outline-none modal-close px-4 bg-gray-200 p-3 rounded-lg text-black hover:bg-gray-300"
-                                        onClick={() => closeModal('size')}
+                                        onClick={() => closeModal('category')}
                                     >
                                         Cancelar
                                     </button>

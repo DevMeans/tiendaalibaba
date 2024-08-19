@@ -7,6 +7,7 @@ interface State {
   isOpenModalSize: boolean;
   isOpenModalColor: boolean;
   isOpenModalTag: boolean;
+  isOpenModalCategory: boolean;
 
   openModal: (modaltype: string) => void;
   closeModal: (modaltype: string) => void;
@@ -17,6 +18,7 @@ export const useUIStore = create<State>()((set) => ({
   isOpenModalSize: false,
   isOpenModalColor: false,
   isOpenModalTag: false,
+  isOpenModalCategory: false,
 
   openSideMenu: () => set({ isSideOpenMenu: true }),
   closeSideMenu: () => set({ isSideOpenMenu: false }),
@@ -30,6 +32,9 @@ export const useUIStore = create<State>()((set) => ({
     if (modaltype == "tag") {
       set({ isOpenModalTag: true });
     }
+    if (modaltype == "category") {
+      set({ isOpenModalCategory: true });
+    }
   },
   closeModal: (modaltype) => {
     if (modaltype == "color") {
@@ -40,6 +45,9 @@ export const useUIStore = create<State>()((set) => ({
     }
     if (modaltype == "tag") {
       set({ isOpenModalTag: false });
+    }
+    if (modaltype == "category") {
+      set({ isOpenModalCategory: false });
     }
   },
 }));
