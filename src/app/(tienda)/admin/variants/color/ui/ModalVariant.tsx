@@ -50,7 +50,6 @@ export default function ModalComponent({ selectedColor, action }: Props) {
             if (!resp.ok) {
                 setError(resp.msg)
             }
-
         }
     }
     useEffect(() => {
@@ -121,7 +120,7 @@ export default function ModalComponent({ selectedColor, action }: Props) {
                                         />
                                         {errors.hexCode && <span className='text-sm text-red-500'>{errors.hexCode.message}</span>}
                                     </div>
-                                    <div className='w-full h-10 bg-slate-200'></div>
+                                    <div className='w-full h-10' style={{backgroundColor:`${selectedColor?.hexCode}`}}></div>
                                 </div>
                                 {/* Footer */}
                                 <div className="flex justify-end pt-2">

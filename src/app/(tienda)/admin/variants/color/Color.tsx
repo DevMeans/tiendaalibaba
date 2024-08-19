@@ -23,13 +23,13 @@ export const ColorComponent = ({ colors }: Props) => {
                 <button onClick={() => { openmodal('color'); setAction('new') }} className="ml-3 p-1 bg-black text-white rounded">
                     Nuevo boton
                 </button>
-                <table className="border mt-5">
+                <table className="border mt-5 w-full">
                     <thead className="bg-black text-white text-left">
                         <tr>
-                            <th className="w-16">
+                            <th >
                                 nro.
                             </th>
-                            <th className="" >
+                            <th >
                                 Nombre
                             </th>
                             <th>
@@ -43,7 +43,7 @@ export const ColorComponent = ({ colors }: Props) => {
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="bg-slate-50">
                         {
                             colors.map((color, index) => (
                                 <tr key={color.id}>
@@ -55,7 +55,10 @@ export const ColorComponent = ({ colors }: Props) => {
                                     </td>
 
                                     <td>
-                                        {color.hexCode}
+                                        <div style={{ backgroundColor: `${color.hexCode}` }} className="w-20 h-5">
+
+                                        </div>
+
                                     </td>
                                     <td>
                                         Estado
