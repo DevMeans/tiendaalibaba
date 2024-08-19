@@ -17,6 +17,7 @@ export const editColor = async (formdata: FormData) => {
       data: {
         name: data.name!,
         hexCode: data.hexCode!,
+        estado: data.estado,
       },
     });
     revalidatePath("/admin/variants");

@@ -19,6 +19,7 @@ export default function ModalComponent({ selectedColor, action }: Props) {
         defaultValues: {
             name: "",
             hexCode: "",
+            estado: "ACTIVO"
         }
     })
 
@@ -26,12 +27,14 @@ export default function ModalComponent({ selectedColor, action }: Props) {
         console.log(action)
         const formData = new FormData();
 
-        // TODO: HACER UNA CONDICIONAL CUANDO VIENE EL ID O NO
+        // TODO: HACER UNA CONDICIONAL CUANDO VIENE EL ID O NO //TRATAR EL ESTADO COMO STRING
         if (action == 'edit') {
             formData.append('id', data.id!)
         }
         formData.append('name', data.name)
         formData.append('hexCode', data.hexCode)
+        formData.append('estado', data.estado)
+
         let resp;
         if (action == 'new') {
             resp = await createColor(formData)
@@ -44,6 +47,7 @@ export default function ModalComponent({ selectedColor, action }: Props) {
         }
         if (action == 'edit') {
             resp = await editColor(formData)
+            console.log(resp)
             if (resp.ok) {
                 closeModal('color')
             }
@@ -120,7 +124,13 @@ export default function ModalComponent({ selectedColor, action }: Props) {
                                         />
                                         {errors.hexCode && <span className='text-sm text-red-500'>{errors.hexCode.message}</span>}
                                     </div>
-                                    <div className='w-full h-10' style={{backgroundColor:`${selectedColor?.hexCode}`}}></div>
+                                    <div className="mb-3" >
+                                        <select id="" className="focus:outline-none h-10 w-full border pl-1"  {...register('estado', { required: 'El estado es requerido' })}>
+                                            <option value="ACTIVO">activo</option>
+                                            <option value="INACTIVO">inactivo</option>
+                                        </select>
+                                    </div>
+                                    <div className='w-full h-10' style={{ backgroundColor: `${selectedColor?.hexCode}` }}></div>
                                 </div>
                                 {/* Footer */}
                                 <div className="flex justify-end pt-2">

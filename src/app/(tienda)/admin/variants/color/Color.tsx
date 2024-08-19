@@ -3,6 +3,7 @@ import { useUIStore } from "@/store";
 import ModalComponent from "./ui/ModalVariant";
 import { Color } from "@/interfaces/color.interface";
 import { useState } from "react";
+import { DeleteColor } from "@/actions/color";
 interface Props {
     colors: Color[]
 }
@@ -16,6 +17,9 @@ export const ColorComponent = ({ colors }: Props) => {
         openmodal('color');
         setAction('edit')// Abre el modal
     };
+    const deleteColor = (id: string) => {
+        DeleteColor(id)
+    }
     return (
         <>
             <div className="">
@@ -46,7 +50,7 @@ export const ColorComponent = ({ colors }: Props) => {
                     <tbody className="bg-slate-50">
                         {
                             colors.map((color, index) => (
-                                <tr key={color.id}>
+                                <tr key={color.id} className="border-y-2">
                                     <td>
                                         {index + 1}
                                     </td>
@@ -61,10 +65,13 @@ export const ColorComponent = ({ colors }: Props) => {
 
                                     </td>
                                     <td>
-                                        Estado
+
+                                        {(color.estado == "ACTIVO") ? <span className="text-white bg-green-500 text-sm p-1 rounded-lg">{color.estado}</span> : <span className="text-white bg-red-500 text-sm p-1 rounded-lg">{color.estado}</span>}
                                     </td>
                                     <td>
-                                        eliminar
+                                        <button className="px-2 py-1 bg-red-500 text-white font-bold" onClick={() => deleteColor(color.id!)}>
+                                            x
+                                        </button>
                                     </td>
                                 </tr>
                             ))

@@ -59,18 +59,23 @@ model ProductVariant {
   transfers  WarehouseTransfer[]
 }
 
+enum TypeEstado {
+  ACTIVO
+  INACTIVO
+}
+
 model Color {
   id       String           @id @default(uuid())
   name     String           @unique
   hexCode  String
-  estado   Boolean          @default(true)
+  estado   TypeEstado       @default(ACTIVO)
   variants ProductVariant[]
 }
 
 model Size {
   id       String           @id @default(uuid())
   name     String           @unique
-  estado   Boolean          @default(true)
+  estado   TypeEstado       @default(ACTIVO)
   variants ProductVariant[]
 }
 
