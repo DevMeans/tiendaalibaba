@@ -1,16 +1,10 @@
 'use client'
 import CheckBoxComponent from "@/app/components/checkbox/CheckBox"
 import ImageUploader from "@/app/components/uploading/Uploading"
-import { Color } from "@/interfaces/color.interface"
-import { Product } from "@/interfaces/product.interface"
-import { Size } from "@/interfaces/size.interface"
-
 interface Props {
-    product: Product,
-    size: Size[],
-    color: Color[]
+
 }
-export const ProductForm = ({ product, size, color }: Props) => {
+export const ProductForm = () => {
     return (
         <form action="https://formbold.com/s/FORM_ID" method="POST">
             <div className="mb-5">

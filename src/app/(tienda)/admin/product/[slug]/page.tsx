@@ -15,7 +15,7 @@ export default function ProductBySlug({ params }: Props) {
 
             <div className="mx-auto w-full max-w-[550px]">
                 {
-                    /**<ProductForm product={ } size={ } color={ } /> */
+                    <ProductForm /> 
                 }
                 
             </div>
