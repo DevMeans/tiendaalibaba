@@ -1,24 +1,25 @@
 "use server";
-import { Color } from "@/interfaces/color.interface";
+
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
-export const createColor = async (formdata: FormData) => {
-  const data: Partial<Color> = {};
+import { Tag } from "@/interfaces/tag.interface";
+
+export const createTag = async (formdata: FormData) => {
+  const data: Partial<Tag> = {};
   formdata.forEach((value, key) => {
     (data as any)[key] = value;
   });
   try {
-    await prisma.color.create({
+    await prisma.tag.create({
       data: {
         name: data.name!,
-        hexCode: data.hexCode!,
       },
     });
     revalidatePath("/admin/variants");
     return {
       ok: true,
-      msg: "Color creado",
+      msg: "Tag creado",
     };
   } catch (error) {
     //P2015
@@ -26,14 +27,14 @@ export const createColor = async (formdata: FormData) => {
       if (error.code === "P2002") {
         return {
           ok: false,
-          msg: `Ya existe un color con el nombre '${data.name}'.`,
+          msg: `Ya existe un Tag con el nombre '${data.name}'.`,
         };
       }
     }
     console.log("Error desconocido: ", error);
     return {
       ok: false,
-      msg: "Problema con la creación del color.",
+      msg: "Problema con la creación del Tag.",
     };
   }
 };

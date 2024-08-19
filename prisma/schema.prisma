@@ -14,9 +14,9 @@ datasource db {
 }
 
 model Category {
-  id   String @id @default(uuid())
-  name String @unique
-
+  id       String     @id @default(uuid())
+  name     String     @unique
+  estado   TypeEstado @default(ACTIVO)
   products Product[]
 }
 
@@ -87,9 +87,9 @@ model ProductImage {
 }
 
 model Tag {
-  id   String @id @default(uuid())
-  name String @unique
-
+  id          String       @id @default(uuid())
+  name        String       @unique
+  estado      TypeEstado   @default(ACTIVO)
   productTags ProductTag[]
 }
 

@@ -72,7 +72,7 @@ export const ColorComponent = ({ colors }: Props) => {
                                         {(color.estado == "ACTIVO") ? <span className="text-white bg-green-500 text-sm p-1 rounded-lg">{color.estado}</span> : <span className="text-white bg-red-500 text-sm p-1 rounded-lg">{color.estado}</span>}
                                     </td>
                                     <td>
-                                        <button className="px-2 py-1 bg-red-500 text-white font-bold" onClick={() => deleteColor(color.id!)}>
+                                        <button className="px-2 py-1 bg-red-500 text-white font-bold rounded-md" onClick={() => deleteColor(color.id!)}>
                                             x
                                         </button>
                                     </td>
