@@ -3,8 +3,8 @@ import { useForm } from "react-hook-form"
 import { useUIStore } from '@/store';
 import './modal.css'
 import { Color } from "@/interfaces/color.interface";
-import { createColor } from "@/actions/color";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { createColor, editColor } from "@/actions/color";
 
 interface Props {
     selectedColor: Partial<Color> | null;
@@ -12,10 +12,9 @@ interface Props {
 }
 
 export default function ModalComponent({ selectedColor, action }: Props) {
-    console.log(selectedColor)
-
     const isSideModalOpen = useUIStore(state => state.isOpenModalColor)
     const closeModal = useUIStore(state => state.closeModal)
+    const [error, setError] = useState('')
     const { register, handleSubmit, reset, formState: { errors } } = useForm<Color>({
         defaultValues: {
             name: "",
@@ -24,23 +23,54 @@ export default function ModalComponent({ selectedColor, action }: Props) {
     })
 
     const onSubmit = async (data: Color) => {
-        const formData = new FormData();//TODO:MILTON  ACA HACER UNA CONDCIONAL CUANDO VIENE EL ID O NO
+        console.log(action)
+        const formData = new FormData();
+
+        // TODO: HACER UNA CONDICIONAL CUANDO VIENE EL ID O NO
+        if (action == 'edit') {
+            formData.append('id', data.id!)
+        }
         formData.append('name', data.name)
         formData.append('hexCode', data.hexCode)
-        const color = await createColor(formData)
-        console.log(color)
-    }
+        let resp;
+        if (action == 'new') {
+            resp = await createColor(formData)
+            if (resp.ok) {
+                closeModal('color')
+            }
+            if (!resp.ok) {
+                setError(resp.msg)
+            }
+        }
+        if (action == 'edit') {
+            resp = await editColor(formData)
+            if (resp.ok) {
+                closeModal('color')
+            }
+            if (!resp.ok) {
+                setError(resp.msg)
+            }
 
+        }
+    }
     useEffect(() => {
-        if (action === 'new') {
+        if (!isSideModalOpen) {
             reset({
                 name: "",
                 hexCode: "",
             });
-        } else if (selectedColor) {
-            reset(selectedColor);
+        } else if (isSideModalOpen) {
+            setError('')
+            if (action === 'new') {
+                reset({
+                    name: "",
+                    hexCode: "",
+                });
+            } else if (selectedColor) {
+                reset(selectedColor);
+            }
         }
-    }, [selectedColor, action, reset]);
+    }, [isSideModalOpen, selectedColor, action, reset]);
 
     return (
         <div>
@@ -61,9 +91,13 @@ export default function ModalComponent({ selectedColor, action }: Props) {
                                 </div>
                             </div>
                             {/* Body */}
+                            <div className="text-xl font-extrabold text-red-500">
+                                {error}
+                            </div>
                             <form onSubmit={handleSubmit(onSubmit)}>
                                 <div className="my-5">
                                     <div className='mb-3'>
+
                                         <input
                                             type="text"
                                             className='w-full focus:outline-none border p-2'

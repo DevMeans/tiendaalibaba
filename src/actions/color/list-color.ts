@@ -1,6 +1,5 @@
 "use server";
-import { Prisma, PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import prisma from "@/lib/prisma";
 export const ListColor = async () => {
   try {
     const listColor = await prisma.color.findMany();

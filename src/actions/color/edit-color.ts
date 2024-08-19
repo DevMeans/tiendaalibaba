@@ -2,15 +2,18 @@
 import { Color } from "@/interfaces/color.interface";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import prisma from '@/lib/prisma';
+import prisma from "@/lib/prisma";
 
-export const createColor = async (formdata: FormData) => {
+export const editColor = async (formdata: FormData) => {
   const data: Partial<Color> = {};
   formdata.forEach((value, key) => {
     (data as any)[key] = value;
   });
   try {
-    await prisma.color.create({
+    await prisma.color.update({
+      where: {
+        id: data.id,
+      },
       data: {
         name: data.name!,
         hexCode: data.hexCode!,
@@ -19,7 +22,7 @@ export const createColor = async (formdata: FormData) => {
     revalidatePath("/admin/variants");
     return {
       ok: true,
-      msg: "Color creado",
+      msg: "Color Editado",
     };
   } catch (error) {
     //P2015
@@ -30,11 +33,17 @@ export const createColor = async (formdata: FormData) => {
           msg: `Ya existe un color con el nombre '${data.name}'.`,
         };
       }
+      if (error.code === "P2015") {
+        return {
+          ok: false,
+          msg: `No existe registro con el idcolor '${data.id}'.`,
+        };
+      }
     }
     console.log("Error desconocido: ", error);
     return {
       ok: false,
-      msg: "Problema con la creación del color.",
+      msg: "Problema con edicion del color.",
     };
   }
 };
