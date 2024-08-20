@@ -2,8 +2,7 @@ import { Product } from "./product.interface";
 
 export interface ProductImage {
     id: string;
-    product: Product;
-    productId: bigint;
+    productId: string;
     imageUrl: string;
   }
   

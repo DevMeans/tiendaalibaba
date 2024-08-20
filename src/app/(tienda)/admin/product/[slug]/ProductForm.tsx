@@ -1,7 +1,9 @@
 'use client'
+import { CreateProduct } from '@/actions/product/create-product';
 import ImageUploader from '@/app/components/uploading/Uploading';
-import React, { useState } from 'react';
-import { useForm, SubmitHandler, useWatch } from 'react-hook-form';
+import { Product } from '@/interfaces/product.interface';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 
 interface IFormInput {
     name: string;
@@ -25,13 +27,29 @@ interface Props {
 }
 
 export const ProductForm = ({ categories, tags }: Props) => {
-    const { register, handleSubmit, setValue, resetField, getValues } = useForm<IFormInput>();
-    const setFormulario = (data: any) => {
+    const { register, handleSubmit, setValue } = useForm<IFormInput>();
+
+
+    const setFormulario = async (data: IFormInput) => {
+        const formData = new FormData();
+        const { images, ...productToSave } = data
+        formData.append('name', productToSave.name)
+        formData.append('slug', productToSave.slug)
+        formData.append('categoryId', productToSave.category)
+        formData.append('description', productToSave.description)
+        formData.append('tags', productToSave.tags.toString())
+        if (images) {
+            for (let i = 0; i < images.length; i++) {
+                formData.append('images', images[i])
+            }
+        }
         //TODO: AGREGAR newvariants al formulario
-        console.log(data)
+        console.log(formData)
+        const resp = await CreateProduct(formData)
+        console.log(resp)
     }
     return (
-        <form onSubmit={handleSubmit((data) => setFormulario(data))}>
+        <form onSubmit={handleSubmit(setFormulario)}>
             <div className="mb-5">
                 <label className="mb-3 block text-base font-medium text-[#07074D]">
                     Nombre del producto
