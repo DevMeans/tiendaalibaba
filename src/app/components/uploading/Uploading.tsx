@@ -1,13 +1,19 @@
 'use client'
 import React, { useState, ChangeEvent } from 'react';
 import Image from 'next/image';
+import { UseFormSetValue } from 'react-hook-form';
 
 type SelectedImage = {
     file: File;
     url: string;
 };
 
-const ImageUploader = () => {
+interface ImageUploaderProps {
+    setValue: UseFormSetValue<any>;
+    fieldName: string;
+}
+
+const ImageUploader: React.FC<ImageUploaderProps> = ({ setValue, fieldName }) => {
     const [selectedImages, setSelectedImages] = useState<SelectedImage[]>([]);
 
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -17,19 +23,20 @@ const ImageUploader = () => {
                 file,
                 url: URL.createObjectURL(file),
             }));
-            setSelectedImages((prevImages) => prevImages.concat(imagesArray));
+            setSelectedImages((prevImages) => {
+                const updatedImages = prevImages.concat(imagesArray);
+                setValue(fieldName, updatedImages.map(image => image.file)); // Actualiza el valor en el formulario
+                return updatedImages;
+            });
         }
     };
 
-    const handleUpload = () => {
-        // Aquí se manejaría la lógica de subida de las imágenes al servidor
-        alert('Subiendo imágenes...');
-    };
-
     const handleRemoveImage = (url: string) => {
-        setSelectedImages((prevImages) =>
-            prevImages.filter((image) => image.url !== url)
-        );
+        setSelectedImages((prevImages) => {
+            const updatedImages = prevImages.filter((image) => image.url !== url);
+            setValue(fieldName, updatedImages.map(image => image.file)); // Actualiza el valor en el formulario
+            return updatedImages;
+        });
     };
 
     return (
@@ -52,7 +59,7 @@ const ImageUploader = () => {
                         />
                         <button
                             onClick={(e) => {
-                                e.preventDefault(); // Previene la acción predeterminada del evento.
+                                e.preventDefault();
                                 handleRemoveImage(image.url);
                             }}
                             className="absolute top-0 right-0 bg-red-500 text-white px-2 py-1 rounded-full text-xs hover:bg-red-600"
@@ -62,16 +69,6 @@ const ImageUploader = () => {
                     </div>
                 ))}
             </div>
-            {
-                /** 
-                 *    <button
-                onClick={handleUpload}
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-              >
-                Subir Imágenes
-              </button> */
-            }
-
         </div>
     );
 };
