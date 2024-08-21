@@ -17,10 +17,14 @@ const nextConfig = {
       {
         protocol:'https',
         hostname:'sc04.alicdn.com'
-      }
+      },
+      {
+        protocol:'https',
+        hostname:'res.cloudinary.com'
+    }
       
     ],
-  },
+  }
 };
 
 export default nextConfig;

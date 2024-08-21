@@ -4,6 +4,8 @@ import ImageUploader from '@/app/components/uploading/Uploading';
 import { Product } from '@/interfaces/product.interface';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { ProductById } from '../get-product-id';
+import Image from 'next/image';
 
 interface IFormInput {
     name: string;
@@ -24,10 +26,27 @@ interface Tag {
 interface Props {
     categories: Category[];
     tags: Tag[];
+    product: Partial<ProductById> | null
 }
 
-export const ProductForm = ({ categories, tags }: Props) => {
-    const { register, handleSubmit, setValue } = useForm<IFormInput>();
+export const ProductForm = ({ categories, tags, product }: Props) => {
+    const { register, handleSubmit, setValue } = useForm<IFormInput>({
+        defaultValues: {
+            name: product ? product.name : '',
+            slug: product ? product.slug : '',
+            description: product ? product.description : '',
+            category: product ? product.categoryId : '',
+        }
+    });
+    let productexist: any;
+    if (product) {
+        productexist = product
+    }
+    console.log(product?.tags)
+    let tagmap: any[] = []
+    if (product?.tags) {
+        tagmap = product.tags.map((tag) => tag.tagId)
+    }
 
 
     const setFormulario = async (data: IFormInput) => {
@@ -47,6 +66,7 @@ export const ProductForm = ({ categories, tags }: Props) => {
         console.log(formData)
         const resp = await CreateProduct(formData)
         console.log(resp)
+
     }
     return (
         <form onSubmit={handleSubmit(setFormulario)}>
@@ -102,6 +122,7 @@ export const ProductForm = ({ categories, tags }: Props) => {
                     {tags.map((tag) => (
                         <div key={tag.id} className="flex items-center">
                             <input
+                                defaultChecked={tagmap.includes(tag.id)}
                                 {...register('tags')}
                                 type="checkbox"
                                 value={tag.id}
@@ -115,6 +136,16 @@ export const ProductForm = ({ categories, tags }: Props) => {
             <div className="mb-5">
                 <label className="mb-3 block text-base font-medium text-[#07074D]">Imágenes</label>
                 <ImageUploader setValue={setValue} fieldName="images" />
+            </div>
+            <div className='mb-5 flex flex-wrap gap-4 p-5 border justify-center'>
+                {
+                    (product?.images) ?
+                        product.images.map((image) => (
+                            <Image key={image.id} src={image.imageUrl} alt={productexist.name} width={130} height={130} ></Image>
+                        ))
+                        : ''
+                }
+
             </div>
             {/* Segunda instancia de ImageUploader, apuntando a "imagesByColor" */}
             <button className='bg-black text-white p-2 rounded'>Guardar</button>
