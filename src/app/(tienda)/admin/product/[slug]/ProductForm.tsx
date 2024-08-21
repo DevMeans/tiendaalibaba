@@ -6,6 +6,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { ProductById } from '../get-product-id';
 import Image from 'next/image';
+import { UpdateProduct } from '@/actions/product/update-product';
 
 interface IFormInput {
     name: string;
@@ -52,6 +53,9 @@ export const ProductForm = ({ categories, tags, product }: Props) => {
     const setFormulario = async (data: IFormInput) => {
         const formData = new FormData();
         const { images, ...productToSave } = data
+        if(product?.id){
+            formData.append('id',product.id)
+        }
         formData.append('name', productToSave.name)
         formData.append('slug', productToSave.slug)
         formData.append('categoryId', productToSave.category)
@@ -64,9 +68,15 @@ export const ProductForm = ({ categories, tags, product }: Props) => {
         }
         //TODO: AGREGAR newvariants al formulario
         console.log(formData)
-        const resp = await CreateProduct(formData)
-        console.log(resp)
-
+        if (product?.id) {
+            console.log(product.id)
+            const resp = await UpdateProduct(formData)
+            console.log(resp)
+        }
+        if(!product?.id){
+            const resp = await CreateProduct(formData)
+            console.log(resp)
+        }
     }
     return (
         <form onSubmit={handleSubmit(setFormulario)}>
