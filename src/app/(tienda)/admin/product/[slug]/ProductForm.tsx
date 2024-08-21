@@ -175,12 +175,12 @@ export default function ProductForm({ categories, tags, product }: Props) {
                 {
                     (product?.images) ?
                         product.images.map((image) => (
-                            <div key={image.id} className='relative' onClick={() => eliminarImagen(image.id, image.imageUrl, product.id!)}>
+                            <div key={image.id} className='relative w-[100px]' onClick={() => eliminarImagen(image.id, image.imageUrl, product.id!)}>
                                 <div className='absolute rounded-full bg-red-500 size-6 text-center flex justify-center items-center cursor-pointer ml-1 mt-1'>
                                     <span className='text-white'>x
                                     </span>
                                 </div>
-                                <Image src={image.imageUrl} alt={productexist.name} width={130} height={130} ></Image>
+                                <Image src={image.imageUrl} alt={productexist.name} className='object-cover inset-0 w-full h-full' width={130} height={130} ></Image>
                             </div>
 
                         ))

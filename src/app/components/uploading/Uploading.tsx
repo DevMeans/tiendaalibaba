@@ -51,11 +51,12 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ setValue, fieldName }) =>
             <div className="grid grid-cols-3 gap-4 mb-4">
                 {selectedImages.map((image, index) => (
                     <div key={index} className="relative w-32 h-32">
-                        <Image
+                        <Image className='object-cover inset-0 w-full h-full'
                             src={image.url}
                             alt={`preview ${index}`}
-                            layout="fill"
-                            objectFit="cover"
+                            width={300}
+                            height={300}
+
                         />
                         <button
                             onClick={(e) => {
