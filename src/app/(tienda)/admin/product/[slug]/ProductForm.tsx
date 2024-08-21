@@ -7,6 +7,8 @@ import { useForm } from 'react-hook-form';
 import { ProductById } from '../get-product-id';
 import Image from 'next/image';
 import { UpdateProduct } from '@/actions/product/update-product';
+import { deleteProductImage } from '@/actions/product/delete-img-product';
+import { toast } from 'sonner';
 
 
 
@@ -74,8 +76,9 @@ export default function ProductForm({ categories, tags, product }: Props) {
         if (product?.id) {
             console.log(product.id)
             const resp = await UpdateProduct(formData)
-            if(resp?.error){
+            if (resp?.error) {
                 setError(resp.error)
+            
             }
             console.log(resp)
 
@@ -85,6 +88,19 @@ export default function ProductForm({ categories, tags, product }: Props) {
             console.log(resp)
         }
     }
+
+    const eliminarImagen = async (imageId: string,
+        imageUrl: string,
+        productId: string) => {
+            toast.info('Eliminando Imagen')
+        const eliminarImagen = await deleteProductImage(imageId, imageUrl, productId)
+        if (eliminarImagen.ok) {
+            toast.success('Imagen eliminada correctamente')
+        } else {
+            toast.error('Error al eliminar imagen revisar logs')
+        }
+    }
+
     return (
         <form onSubmit={handleSubmit(setFormulario)}>
             <span className='text-red-500'>{error}</span>
@@ -159,7 +175,14 @@ export default function ProductForm({ categories, tags, product }: Props) {
                 {
                     (product?.images) ?
                         product.images.map((image) => (
-                            <Image key={image.id} src={image.imageUrl} alt={productexist.name} width={130} height={130} ></Image>
+                            <div key={image.id} className='relative' onClick={() => eliminarImagen(image.id, image.imageUrl, product.id!)}>
+                                <div className='absolute rounded-full bg-red-500 size-6 text-center flex justify-center items-center cursor-pointer ml-1 mt-1'>
+                                    <span className='text-white'>x
+                                    </span>
+                                </div>
+                                <Image src={image.imageUrl} alt={productexist.name} width={130} height={130} ></Image>
+                            </div>
+
                         ))
                         : ''
                 }

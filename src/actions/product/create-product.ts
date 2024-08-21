@@ -4,6 +4,7 @@ import { z } from "zod";
 import prisma from "@/lib/prisma";
 import { ProductTag } from "@/interfaces/product-tag.interface";
 import { Prisma } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 cloudinary.config(process.env.CLOUDINARY_URL ?? "");
 
@@ -73,6 +74,7 @@ export const CreateProduct = async (formData: FormData) => {
           })),
         });
       }
+      revalidatePath(`/admin/product/${productdb.id}`);
     });
 
     return {
