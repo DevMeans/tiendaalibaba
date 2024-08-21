@@ -86,16 +86,15 @@ export const CreateProduct = async (formData: FormData) => {
         // Prisma error code for unique constraint violation
         return {
           ok: false,
-          error: `El ${error.meta?.target} ya existe. Deben ser únicos.`,
+          error: `El ${error.meta!.target} ya existe. Deben ser únicos.`,
         };
       }
-    } else {
-      console.log(error);
-      return {
-        ok: false,
-        error: "Error desconocido", // Incluye el mensaje de error para más contexto
-      };
     }
+    console.log(error);
+    return {
+      ok: false,
+      error: "Error desconocido", // Incluye el mensaje de error para más contexto
+    };
   }
 };
 

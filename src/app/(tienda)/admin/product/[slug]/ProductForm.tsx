@@ -2,11 +2,13 @@
 import { CreateProduct } from '@/actions/product/create-product';
 import ImageUploader from '@/app/components/uploading/Uploading';
 import { Product } from '@/interfaces/product.interface';
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { ProductById } from '../get-product-id';
 import Image from 'next/image';
 import { UpdateProduct } from '@/actions/product/update-product';
+
+
 
 interface IFormInput {
     name: string;
@@ -30,7 +32,9 @@ interface Props {
     product: Partial<ProductById> | null
 }
 
-export const ProductForm = ({ categories, tags, product }: Props) => {
+export default function ProductForm({ categories, tags, product }: Props) {
+
+    const [error, setError] = useState('')
     const { register, handleSubmit, setValue } = useForm<IFormInput>({
         defaultValues: {
             name: product ? product.name : '',
@@ -43,7 +47,6 @@ export const ProductForm = ({ categories, tags, product }: Props) => {
     if (product) {
         productexist = product
     }
-    console.log(product?.tags)
     let tagmap: any[] = []
     if (product?.tags) {
         tagmap = product.tags.map((tag) => tag.tagId)
@@ -53,8 +56,8 @@ export const ProductForm = ({ categories, tags, product }: Props) => {
     const setFormulario = async (data: IFormInput) => {
         const formData = new FormData();
         const { images, ...productToSave } = data
-        if(product?.id){
-            formData.append('id',product.id)
+        if (product?.id) {
+            formData.append('id', product.id)
         }
         formData.append('name', productToSave.name)
         formData.append('slug', productToSave.slug)
@@ -71,15 +74,20 @@ export const ProductForm = ({ categories, tags, product }: Props) => {
         if (product?.id) {
             console.log(product.id)
             const resp = await UpdateProduct(formData)
+            if(resp?.error){
+                setError(resp.error)
+            }
             console.log(resp)
+
         }
-        if(!product?.id){
+        if (!product?.id) {
             const resp = await CreateProduct(formData)
             console.log(resp)
         }
     }
     return (
         <form onSubmit={handleSubmit(setFormulario)}>
+            <span className='text-red-500'>{error}</span>
             <div className="mb-5">
                 <label className="mb-3 block text-base font-medium text-[#07074D]">
                     Nombre del producto

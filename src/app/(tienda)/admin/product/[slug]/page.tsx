@@ -1,8 +1,9 @@
 
 import { ListCategory } from "@/actions/category";
-import { ProductForm } from "./ProductForm";
+
 import { ListTag } from "@/actions/tag";
 import { getProductID } from "@/actions/product/get-product-id";
+import ProductForm from "./ProductForm";
 interface Props {
     params: {
         slug: string;
