@@ -78,7 +78,7 @@ export default function ProductForm({ categories, tags, product }: Props) {
             const resp = await UpdateProduct(formData)
             if (resp?.error) {
                 setError(resp.error)
-            
+
             }
             console.log(resp)
 
@@ -92,7 +92,7 @@ export default function ProductForm({ categories, tags, product }: Props) {
     const eliminarImagen = async (imageId: string,
         imageUrl: string,
         productId: string) => {
-            toast.info('Eliminando Imagen')
+        toast.info('Eliminando Imagen')
         const eliminarImagen = await deleteProductImage(imageId, imageUrl, productId)
         if (eliminarImagen.ok) {
             toast.success('Imagen eliminada correctamente')
