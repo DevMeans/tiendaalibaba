@@ -110,9 +110,11 @@ export default function VariantForm({ product, colors, sizes }: Props) {
                     )}
                 </div>
             </div>
-            <div className="h-5">
 
+            <div className="flex items-center justify-center my-7">
+                <button className="p-2 uppercase bg-black text-white rounded-md">agregar</button>
             </div>
+
             <div>
                 <table className="w-full text-left">
                     <thead>
