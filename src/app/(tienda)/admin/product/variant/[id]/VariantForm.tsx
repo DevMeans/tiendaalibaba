@@ -26,11 +26,12 @@ interface Props {
     product: Product;
     colors: Color[];
     sizes: Size[];
+    colorsProduct: any[]
 }
 
 
-export default function VariantForm({ product, colors, sizes }: Props) {
-
+export default function VariantForm({ product, colors, sizes, colorsProduct }: Props) {
+    console.log(colorsProduct)
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [inputValue, setInputValue] = useState('');
     const [filteredColors, setFilteredColors] = useState<Color[]>([]);
@@ -83,14 +84,14 @@ export default function VariantForm({ product, colors, sizes }: Props) {
             reader.onloadend = async () => {
                 if (typeof reader.result === "string") {
                     const base64Image = reader.result; // Incluye todo el string, incluyendo 'data:image/png;base64,'
-    
+
                     const variantData = {
                         productId: product.id,
                         colorId: selectedColor.id,
                         image: base64Image, // Envía la imagen como base64 incluyendo el prefijo
                     };
                     console.log(variantData);
-                   const creatingProductColor = await createProductColor(variantData);
+                    const creatingProductColor = await createProductColor(variantData);
                     console.log(creatingProductColor);
                 }
             };
@@ -99,7 +100,7 @@ export default function VariantForm({ product, colors, sizes }: Props) {
             alert("Por favor, selecciona un color y una imagen.");
         }
     };
-    
+
 
     return (
         <div className="m-auto max-w-[1200px] p-10">
@@ -194,7 +195,20 @@ export default function VariantForm({ product, colors, sizes }: Props) {
                     </div>
                 </div>
             </div>
-            <div className="h-12"></div>
+            <div className="h-6"></div>
+            <div className="flex gap-2 ">
+                {
+                    colorsProduct.map((item) => (
+                        <div key={item.id} className="bg-slate-100 text-center relative">
+                            <Image src={item.imageUrl} width={50} height={50} alt={item.id} className="mx-auto"></Image>
+                            {item.color.name}
+                            <button className="px-1 text-sm font-semibold text-white bg-red-500 rounded-full absolute top-0 right-0">
+                                x
+                            </button>
+                        </div>
+                    ))
+                }
+            </div>
             <div>
                 <table className="w-full text-left">
                     <thead>

@@ -3,6 +3,7 @@ import { ListSize } from '@/actions/size';
 import VariantForm from './VariantForm';
 import { getProductIDV2 } from "@/actions/product";
 import { ListColor } from '@/actions/color';
+import { listColorProduct } from '../../../../../../actions/color-product-variant/list-color-product';
 
 interface Props {
     params: {
@@ -20,10 +21,11 @@ export default async function ProductVariantPage({ params }: Props) {
     console.log(productdb)
     const sizes = await ListSize()
     const colors = await ListColor()
+    const colorsProduct = await listColorProduct(id)
     return (
         <div>
             {
-                productdb ? <VariantForm product={productdb} colors={colors} sizes={sizes}></VariantForm> : <div>No hay Producto</div>
+                productdb ? <VariantForm colorsProduct={colorsProduct} product={productdb} colors={colors} sizes={sizes}></VariantForm> : <div>No hay Producto</div>
             }
 
         </div>
