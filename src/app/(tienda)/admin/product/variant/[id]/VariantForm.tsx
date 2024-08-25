@@ -100,7 +100,11 @@ export default function VariantForm({ product, colors, sizes, colorsProduct }: P
             alert("Por favor, selecciona un color y una imagen.");
         }
     };
-
+    const eliminarColorProduct = async (item: any) => {
+        const { productId, imageUrl, color } = item
+        const { id } = color
+        console.log({ productId, id, imageUrl }) //TODO :  LLAMAR
+    }
 
     return (
         <div className="m-auto max-w-[1200px] p-10">
@@ -202,7 +206,7 @@ export default function VariantForm({ product, colors, sizes, colorsProduct }: P
                         <div key={item.id} className="bg-slate-100 text-center relative">
                             <Image src={item.imageUrl} width={50} height={50} alt={item.id} className="mx-auto"></Image>
                             {item.color.name}
-                            <button className="px-1 text-sm font-semibold text-white bg-red-500 rounded-full absolute top-0 right-0">
+                            <button onClick={() => eliminarColorProduct(item)} className="px-1 text-sm font-semibold text-white bg-red-500 rounded-full absolute top-0 right-0">
                                 x
                             </button>
                         </div>
