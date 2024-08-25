@@ -4,11 +4,10 @@ import { Product } from "./product.interface";
 
 export interface ProductVariant {
     id: string;
-    product: Product;
-    color: Color;
-    size: Size;
+    product: string;
+    color: string;
+    size: string;
     price: number;
-    stock: number;
     imageUrl: string;
 
   }

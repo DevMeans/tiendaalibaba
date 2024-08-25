@@ -28,17 +28,18 @@ enum UserRole {
 }
 
 model Product {
-  id          String   @id @default(uuid())
-  name        String   @unique
-  description String
-  slug        String   @unique
-  category    Category @relation(fields: [categoryId], references: [id])
-  categoryId  String
-  variants   ProductVariant[]
-  promotions ProductPromotion[]
-  reviews    Review[]
-  images     ProductImage[]
-  tags       ProductTag[]
+  id                  String                @id @default(uuid())
+  name                String                @unique
+  description         String
+  slug                String                @unique
+  category            Category              @relation(fields: [categoryId], references: [id])
+  categoryId          String
+  variants            ProductVariant[]
+  promotions          ProductPromotion[]
+  reviews             Review[]
+  images              ProductImage[]
+  tags                ProductTag[]
+  ProductColorVariant ProductColorVariant[]
 }
 
 model ProductVariant {
@@ -50,7 +51,7 @@ model ProductVariant {
   size      Size?   @relation(fields: [sizeId], references: [id])
   sizeId    String?
   price     Decimal
-  stock     Int
+  stock     Int     @default(100)
   imageUrl  String?
 
   orderItems OrderItem[]
@@ -64,11 +65,12 @@ enum TypeEstado {
 }
 
 model Color {
-  id       String           @id @default(uuid())
-  name     String           @unique
-  hexCode  String
-  estado   TypeEstado       @default(ACTIVO)
-  variants ProductVariant[]
+  id                  String                @id @default(uuid())
+  name                String                @unique
+  hexCode             String
+  estado              TypeEstado            @default(ACTIVO)
+  variants            ProductVariant[]
+  ProductColorVariant ProductColorVariant[]
 }
 
 model Size {
@@ -82,6 +84,15 @@ model ProductImage {
   id        String  @id @default(uuid())
   product   Product @relation(fields: [productId], references: [id])
   productId String
+  imageUrl  String
+}
+
+model ProductColorVariant {
+  id        String  @id @default(uuid())
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+  color     Color   @relation(fields: [colorId], references: [id])
+  colorId   String
   imageUrl  String
 }
 
