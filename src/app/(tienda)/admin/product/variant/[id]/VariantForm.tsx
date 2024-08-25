@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Color } from "@/interfaces/color.interface";
 import { Size } from "@/interfaces/size.interface";
 import './style.css';
+import { createProductColor } from "@/actions/color-product-variant/create-color-product";
 
 interface Product {
     id: string;
@@ -26,6 +27,7 @@ interface Props {
     colors: Color[];
     sizes: Size[];
 }
+
 
 export default function VariantForm({ product, colors, sizes }: Props) {
 
@@ -75,20 +77,29 @@ export default function VariantForm({ product, colors, sizes }: Props) {
         }
     };
 
-    const handleAddVariant = () => {
+    const handleAddVariant = async () => {
         if (selectedColor && selectedImage) {
-            const variantData = {
-                productId: product.id,
-                colorId: selectedColor.id,
-                image: selectedImage,
+            const reader = new FileReader();
+            reader.onloadend = async () => {
+                if (typeof reader.result === "string") {
+                    const base64Image = reader.result; // Incluye todo el string, incluyendo 'data:image/png;base64,'
+    
+                    const variantData = {
+                        productId: product.id,
+                        colorId: selectedColor.id,
+                        image: base64Image, // Envía la imagen como base64 incluyendo el prefijo
+                    };
+                    console.log(variantData);
+                   const creatingProductColor = await createProductColor(variantData);
+                    console.log(creatingProductColor);
+                }
             };
-            // Aquí puedes realizar la acción deseada con variantData,
-            // como enviarlo a una API o almacenarlo en un estado global.
-            console.log(variantData);
+            reader.readAsDataURL(selectedImage); // Esto automáticamente agrega el prefijo correcto basado en el tipo de archivo
         } else {
             alert("Por favor, selecciona un color y una imagen.");
         }
     };
+    
 
     return (
         <div className="m-auto max-w-[1200px] p-10">
