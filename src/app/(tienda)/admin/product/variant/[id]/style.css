@@ -46,3 +46,24 @@
     font-size: 12px;
     margin-left: auto;
 }
+.options-list {
+    position: absolute;
+    top: 100%; /* Coloca la lista justo debajo del input */
+    left: 0;
+    right: 0;
+    z-index: 10; /* Asegura que se superponga a otros elementos */
+    background-color: white; /* Fondo blanco para que parezca un select */
+    border: 1px solid #ccc; /* Borde similar a un select */
+    border-radius: 4px;
+    max-height: 200px; /* Limita la altura */
+    overflow-y: auto; /* Agrega un scroll si hay muchas opciones */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* Sombras para darle efecto de "desplegable" */
+}
+.option {
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.option:hover {
+    background-color: #f0f0f0;
+}

@@ -33,9 +33,12 @@ export default function VariantForm({ product, colors, sizes }: Props) {
     const [inputValue, setInputValue] = useState('');
     const [filteredColors, setFilteredColors] = useState<Color[]>([]);
     const [selectedColor, setSelectedColor] = useState<Color | null>(null);
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
+            setSelectedImage(file);
             const reader = new FileReader();
             reader.onloadend = () => {
                 if (typeof reader.result === "string") {
@@ -64,7 +67,6 @@ export default function VariantForm({ product, colors, sizes }: Props) {
         setInputValue(color.name);
         setSelectedColor(color);
         setFilteredColors([]);
-
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -73,9 +75,24 @@ export default function VariantForm({ product, colors, sizes }: Props) {
         }
     };
 
+    const handleAddVariant = () => {
+        if (selectedColor && selectedImage) {
+            const variantData = {
+                productId: product.id,
+                colorId: selectedColor.id,
+                image: selectedImage,
+            };
+            // Aquí puedes realizar la acción deseada con variantData,
+            // como enviarlo a una API o almacenarlo en un estado global.
+            console.log(variantData);
+        } else {
+            alert("Por favor, selecciona un color y una imagen.");
+        }
+    };
+
     return (
         <div className="m-auto max-w-[1200px] p-10">
-            <div className="flex justify-center items-center gap-5 ">
+            <div className="flex flex-wrap justify-center items-center gap-5 ">
                 <div className="flex items-center bg-slate-100 border rounded-lg">
                     <div>
                         <Image
@@ -94,8 +111,8 @@ export default function VariantForm({ product, colors, sizes }: Props) {
                         <span className="text-2xl font-semibold ">{product.name}</span>
                     </div>
                 </div>
-                <div className="border flex gap-2 p-5">
-                    <div className="flex items-center gap-2">
+                <div className="border flex flex-col sm:flex-row gap-2 p-5">
+                    <div className="flex items-center justify-center gap-2">
                         <label className="cursor-pointer ">
                             <input
                                 type="file"
@@ -120,49 +137,53 @@ export default function VariantForm({ product, colors, sizes }: Props) {
                             </div>
                         )}
                     </div>
-                    <div>
-
-                        <div className="team-list relative">
-                            <div className="flex items-center">
-                                {selectedColor && (
-                                    <div
-                                        style={{ backgroundColor: selectedColor.hexCode }}
-                                        className="w-4 h-4 rounded-full mr-2"
-                                    ></div>
-                                )} <input
-                                    type="text"
-                                    value={inputValue}
-                                    onChange={handleInputChange}
-                                    onKeyDown={handleKeyDown}
-                                    placeholder="Search by color"
-                                    className="search-input"
-                                />
-                            </div>
-
-                            {filteredColors.length > 0 && (
-                                <div className="options-list">
-                                    {filteredColors.map((color) => (
-                                        <div
-                                            key={color.id}
-                                            className="option flex items-center gap-2"
-                                            onClick={() => handleColorSelect(color)}
-                                        >
-                                            <div
-                                                style={{ backgroundColor: color.hexCode }}
-                                                className="w-4 h-4 rounded-full"
-                                            ></div>
-                                            <span>{color.name}</span>
-                                        </div>
-                                    ))}
-                                </div>
+                    <div className="team-list relative">
+                        <div className="flex items-center">
+                            {selectedColor && (
+                                <div
+                                    style={{ backgroundColor: selectedColor.hexCode }}
+                                    className="w-4 h-4 rounded-full mr-2"
+                                ></div>
                             )}
+                            <input
+                                type="text"
+                                value={inputValue}
+                                onChange={handleInputChange}
+                                onKeyDown={handleKeyDown}
+                                placeholder="Search by color"
+                                className="search-input"
+                            />
                         </div>
+
+                        {filteredColors.length > 0 && (
+                            <div className="options-list">
+                                {filteredColors.map((color) => (
+                                    <div
+                                        key={color.id}
+                                        className="option flex items-center gap-2"
+                                        onClick={() => handleColorSelect(color)}
+                                    >
+                                        <div
+                                            style={{ backgroundColor: color.hexCode }}
+                                            className="w-4 h-4 rounded-full"
+                                        ></div>
+                                        <span>{color.name}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                    <div className="flex items-center justify-center">
+                        <button
+                            className="p-2 bg-black text-white rounded-sm w-full sm:w-7"
+                            onClick={handleAddVariant}
+                        >
+                            +
+                        </button>
                     </div>
                 </div>
             </div>
-
             <div className="h-12"></div>
-
             <div>
                 <table className="w-full text-left">
                     <thead>
