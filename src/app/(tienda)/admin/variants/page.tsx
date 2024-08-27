@@ -18,7 +18,6 @@ export default async function VariantsPage() {
         <div className="max-w-[1200px] m-auto px-5">
             <span className="">Variantes de productos</span>
             <div className='h-5'>
-
             </div>
             <CategoryComponent categories={listCategory}></CategoryComponent>
             <div className='w-full border border-black mt-5 mb-5'>
