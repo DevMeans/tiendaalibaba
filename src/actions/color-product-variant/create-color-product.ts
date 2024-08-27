@@ -1,6 +1,7 @@
 "use server";
 import { v2 as cloudinary } from "cloudinary";
 import prisma from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 cloudinary.config(process.env.CLOUDINARY_URL ?? "");
 
 export interface Subircolor {
@@ -11,6 +12,15 @@ export interface Subircolor {
 
 export const createProductColor = async (productColor: Subircolor) => {
   try {
+    const existe = await prisma.productColorVariant.findFirst({
+      where: {
+        productId: productColor.productId,
+        colorId: productColor.colorId,
+      },
+    });
+    if (existe) {
+      return { ok: false };
+    }
     // Subir la imagen a Cloudinary y obtener la URL
     const imageUrl = await uploadImagenes(productColor.image);
     if (!imageUrl) {
@@ -24,6 +34,7 @@ export const createProductColor = async (productColor: Subircolor) => {
         imageUrl: imageUrl,
       },
     });
+    revalidatePath(`/admin/product/variant/${createColorProductImg.productId}`);
     return createColorProductImg;
   } catch (error) {
     console.error("Error creando el color del producto:", error);

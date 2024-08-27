@@ -5,6 +5,10 @@ import { Color } from "@/interfaces/color.interface";
 import { Size } from "@/interfaces/size.interface";
 import './style.css';
 import { createProductColor } from "@/actions/color-product-variant/create-color-product";
+import { deleteColorProduct } from "@/actions/color-product-variant/delete-color-product";
+import { ProductSizeVariant } from "@/interfaces/product.size.variant";
+import { createSizeProduct } from "@/actions/size-color-variant/create-size-product";
+import { deleteSizeProduct } from "@/actions/size-color-variant/delete-size-variant";
 
 interface Product {
     id: string;
@@ -27,17 +31,19 @@ interface Props {
     colors: Color[];
     sizes: Size[];
     colorsProduct: any[]
+    sizeProduct: ProductSizeVariant[];
 }
 
 
-export default function VariantForm({ product, colors, sizes, colorsProduct }: Props) {
+export default function VariantForm({ product, colors, sizes, colorsProduct, sizeProduct }: Props) {
     console.log(colorsProduct)
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [inputValue, setInputValue] = useState('');
     const [filteredColors, setFilteredColors] = useState<Color[]>([]);
     const [selectedColor, setSelectedColor] = useState<Color | null>(null);
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
-
+    const [tsize, setSise] = useState('')
+    const [tprice, setPrice] = useState(0)
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
@@ -104,8 +110,16 @@ export default function VariantForm({ product, colors, sizes, colorsProduct }: P
         const { productId, imageUrl, color } = item
         const { id } = color
         console.log({ productId, id, imageUrl }) //TODO :  LLAMAR
+        const resp = await deleteColorProduct(productId, id, imageUrl)
     }
-
+    const onclicSize = async (productid: string, size: string, price: number) => {
+        console.log('click')
+        const resp = await createSizeProduct(productid, size, price)
+        console.log(resp)
+    }
+    const onclicDeleteSize = async (productid: string, size: string) => {
+        const resp = await deleteSizeProduct(productid, size)
+    }
     return (
         <div className="m-auto max-w-[1200px] p-10">
             <div className="flex flex-wrap justify-center items-center gap-5 ">
@@ -200,7 +214,7 @@ export default function VariantForm({ product, colors, sizes, colorsProduct }: P
                 </div>
             </div>
             <div className="h-6"></div>
-            <div className="flex gap-2 ">
+            <div className="flex gap-2 justify-center ">
                 {
                     colorsProduct.map((item) => (
                         <div key={item.id} className="bg-slate-100 text-center relative">
@@ -213,21 +227,33 @@ export default function VariantForm({ product, colors, sizes, colorsProduct }: P
                     ))
                 }
             </div>
-            <div>
-                <table className="w-full text-left">
-                    <thead>
-                        <tr className="bg-slate-100">
-                            <th>talla</th>
-                            <th>color</th>
-                            <th>precio</th>
-                            <th>imagen</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                </table>
+            <div className="flex justify-center my-5">
+                <select name="" id="" className="border-y-2 border-l-2 rounded-l-lg" onChange={(e) => setSise(e.target.value)}>
+                    {sizes.map((size) => (
+                        <option key={size.id} value={size.id}>
+                            {size.name}
+                        </option>
+                    ))}
+                </select>
+                <div className="">
+                    <input type="number" className="border-y-2 focus:outline-none w-14  text-center" onChange={(e) => setPrice(parseFloat(e.target.value))} />
+                </div>
+                <button className="bg-black text-white px-2 rounded-r-lg" onClick={() => onclicSize(product.id, tsize, tprice)}>
+                    +
+                </button>
             </div>
+            <div className="flex gap-2 mb-3 justify-center">
+                {
+                    sizeProduct.map((r) => (
+                        <div className="p-2 bg-slate-100 relative text-center" key={r.id}>{r.size.name}
+                            <button onClick={() => onclicDeleteSize(r.productId, r.sizeId)} className="absolute top-[-6px] right-[-6px] bg-red-500 text-white rounded-full text-sm font-semibold px-1">x</button>
+                            <div className="w-full border"></div>
+                            {r.price}
+                        </div>
+                    ))
+                }
+            </div>
+
         </div>
     );
 }

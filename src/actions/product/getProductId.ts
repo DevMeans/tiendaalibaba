@@ -7,7 +7,6 @@ export const getProductIDV2 = async (id: string) => {
       where: { id },
       include: {
         images: true,
-        variants: true,
       },
     });
     return {

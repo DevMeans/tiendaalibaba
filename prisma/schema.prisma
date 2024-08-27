@@ -34,29 +34,21 @@ model Product {
   slug                String                @unique
   category            Category              @relation(fields: [categoryId], references: [id])
   categoryId          String
-  variants            ProductVariant[]
   promotions          ProductPromotion[]
   reviews             Review[]
   images              ProductImage[]
   tags                ProductTag[]
   ProductColorVariant ProductColorVariant[]
+  ProductSizeVariant  ProductSizeVariant[]
 }
 
-model ProductVariant {
+model ProductSizeVariant {
   id        String  @id @default(uuid())
   product   Product @relation(fields: [productId], references: [id])
   productId String
-  color     Color?  @relation(fields: [colorId], references: [id])
-  colorId   String?
-  size      Size?   @relation(fields: [sizeId], references: [id])
-  sizeId    String?
-  price     Decimal
-  stock     Int     @default(100)
-  imageUrl  String?
-
-  orderItems OrderItem[]
-  inventory  Inventory[]
-  transfers  WarehouseTransfer[]
+  size      Size    @relation(fields: [sizeId], references: [id])
+  sizeId    String
+  price     Float
 }
 
 enum TypeEstado {
@@ -69,15 +61,14 @@ model Color {
   name                String                @unique
   hexCode             String
   estado              TypeEstado            @default(ACTIVO)
-  variants            ProductVariant[]
   ProductColorVariant ProductColorVariant[]
 }
 
 model Size {
-  id       String           @id @default(uuid())
-  name     String           @unique
-  estado   TypeEstado       @default(ACTIVO)
-  variants ProductVariant[]
+  id                 String               @id @default(uuid())
+  name               String               @unique
+  estado             TypeEstado           @default(ACTIVO)
+  ProductSizeVariant ProductSizeVariant[]
 }
 
 model ProductImage {
@@ -127,12 +118,10 @@ model Order {
 }
 
 model OrderItem {
-  id               String         @id @default(uuid())
-  order            Order          @relation(fields: [orderId], references: [id])
-  orderId          String
-  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
-  productVariantId String
-  quantity         Int
+  id       String @id @default(uuid())
+  order    Order  @relation(fields: [orderId], references: [id])
+  orderId  String
+  quantity Int
 }
 
 model User {
@@ -177,16 +166,14 @@ model Supplier {
 }
 
 model Inventory {
-  id               String         @id @default(uuid())
-  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
-  productVariantId String
-  supplier         Supplier?      @relation(fields: [supplierId], references: [id])
-  supplierId       String?
-  purchaseDate     DateTime       @default(now())
-  quantity         Int
-  costPrice        Decimal
-  warehouse        Warehouse?     @relation(fields: [warehouseId], references: [id])
-  warehouseId      String?
+  id           String     @id @default(uuid())
+  supplier     Supplier?  @relation(fields: [supplierId], references: [id])
+  supplierId   String?
+  purchaseDate DateTime   @default(now())
+  quantity     Int
+  costPrice    Decimal
+  warehouse    Warehouse? @relation(fields: [warehouseId], references: [id])
+  warehouseId  String?
 }
 
 model Review {
@@ -201,21 +188,19 @@ model Review {
 }
 
 model WarehouseTransfer {
-  id                String         @id @default(uuid())
-  productVariant    ProductVariant @relation(fields: [productVariantId], references: [id])
-  productVariantId  String
-  fromWarehouse     Warehouse?     @relation("FromWarehouse", fields: [fromWarehouseId], references: [id])
+  id                String     @id @default(uuid())
+  fromWarehouse     Warehouse? @relation("FromWarehouse", fields: [fromWarehouseId], references: [id])
   fromWarehouseId   String?
-  toWarehouse       Warehouse?     @relation("ToWarehouse", fields: [toWarehouseId], references: [id])
+  toWarehouse       Warehouse? @relation("ToWarehouse", fields: [toWarehouseId], references: [id])
   toWarehouseId     String?
-  transferDate      DateTime       @default(now())
+  transferDate      DateTime   @default(now())
   quantity          Int
-  requestedByUser   User?          @relation("RequestedByUser", fields: [requestedByUserId], references: [id])
+  requestedByUser   User?      @relation("RequestedByUser", fields: [requestedByUserId], references: [id])
   requestedByUserId String?
-  approvedByUser    User?          @relation("ApprovedByUser", fields: [approvedByUserId], references: [id])
+  approvedByUser    User?      @relation("ApprovedByUser", fields: [approvedByUserId], references: [id])
   approvedByUserId  String?
   approvedAt        DateTime?
-  status            String         @default("pending")
+  status            String     @default("pending")
 }
 
 model Warehouse {
