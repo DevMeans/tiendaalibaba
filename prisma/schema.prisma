@@ -34,6 +34,7 @@ model Product {
   slug                String                @unique
   category            Category              @relation(fields: [categoryId], references: [id])
   categoryId          String
+  estado              TypeEstado            @default(ACTIVO)
   promotions          ProductPromotion[]
   reviews             Review[]
   images              ProductImage[]
