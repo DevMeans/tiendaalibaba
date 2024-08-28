@@ -26,6 +26,7 @@ interface Props {
 }
 
 export default function TableProduct({ products }: Props) {
+
     const router = useRouter()
     console.log('resp', products)
     const changeEstado = async (id: string, estado: any) => {
@@ -40,51 +41,59 @@ export default function TableProduct({ products }: Props) {
         const deleteProductid = await deleteProduct(id)
         console.log(deleteProductid)
     }
+    const onclickProduct = (id: string) => {
+        console.log(id)
+        router.push(`/admin/product/${id}`)
+    }
     return (
-        <table className="w-full text-left">
-            <thead className="bg-black text-white">
-                <tr className="">
-                    <th>
-                        img
-                    </th>
-                    <th>
-                        nombre
-                    </th>
-                    <th>
-                        estado
-                    </th>
-                    <th>variantes</th>
-                    <th>
-                        eliminar
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                {
-                    products.map((product) => (
-                        <tr key={product.id}>
-                            <td>
-                                {product.images && product.images.length > 0 ?
-                                    <Image src={product.images[0].imageUrl} width={30} height={30} alt={product.name}></Image> :
-                                    'leg'}</td>
-                            <td>{product.name}</td>
-                            <td>
-                                <select name="" id="" className='border' defaultValue={product.estado} onChange={(e) => changeEstado(product.id, e.target.value)}>
-                                    <option value="ACTIVO">ACTIVO</option>
-                                    <option value="INACTIVO">INACTIVO</option>
-                                </select>
-                            </td>
-                            <td>
-                                <span className='bg-green-500 text-white p-1 text-xs rounded cursor-pointer' onClick={() => onclick(product.id)}>variantes</span>
-                            </td>
-                            <td>
-                                <button onClick={() => ondelete(product.id)} className='px-1 bg-red-500 text-white text-sm rounded-md font-semibold'>x
-                                </button>
-                            </td>
-                        </tr>
-                    ))
-                }
-            </tbody>
-        </table>
+        <>
+         <button className='uppercase p-2 rounded bg-black text-white mb-4' onClick={()=>router.push(`/admin/product/new`)}>nuevo</button>
+            <table className="w-full text-left">
+                <thead className="bg-black text-white">
+                    <tr className="">
+                        <th>
+                            img
+                        </th>
+                        <th>
+                            nombre
+                        </th>
+                        <th>
+                            estado
+                        </th>
+                        <th>variantes</th>
+                        <th>
+                            eliminar
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        products.map((product) => (
+                            <tr key={product.id}>
+                                <td>
+                                    {product.images && product.images.length > 0 ?
+                                        <Image src={product.images[0].imageUrl} width={30} height={30} alt={product.name}></Image> :
+                                        'leg'}</td>
+                                <td onClick={() => onclickProduct(product.id)} className='cursor-pointer'>{product.name}</td>
+                                <td>
+                                    <select name="" id="" className='border' defaultValue={product.estado} onChange={(e) => changeEstado(product.id, e.target.value)}>
+                                        <option value="ACTIVO">ACTIVO</option>
+                                        <option value="INACTIVO">INACTIVO</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <span className='bg-green-500 text-white p-1 text-xs rounded cursor-pointer' onClick={() => onclick(product.id)}>variantes</span>
+                                </td>
+                                <td>
+                                    <button onClick={() => ondelete(product.id)} className='px-1 bg-red-500 text-white text-sm rounded-md font-semibold'>x
+                                    </button>
+                                </td>
+                            </tr>
+                        ))
+                    }
+                </tbody>
+            </table>
+        </>
+
     );
 }

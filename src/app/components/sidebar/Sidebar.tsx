@@ -13,7 +13,7 @@ export default function SidebarComponent() {
         <div>
             {
                 iSsideMenuOpen && (
-                    <div className="z-20 fixed screensmv2 sm:screenv2 h-screen top-0 left-0 m-auto flex justify-center items-center">
+                    <div className="z-20 fixed screensmv2 sm:screenv2 h-screen top-0 left-0 m-auto flex justify-center items-center" onClick={() => closeMenu()}>
                         <Image className='cursor-pointer z-20' alt='' src={`https://sc04.alicdn.com/kf/H31d890cdd45742e3b2ceedc812818fffY.jpg`} width={250} height={250}></Image>
                     </div>
                 )
@@ -21,7 +21,7 @@ export default function SidebarComponent() {
 
             {
                 iSsideMenuOpen && (
-                    <div className="fixed top-0 left-0 w-screen h-screen z-10 bg-black opacity-30">
+                    <div className="fixed top-0 left-0 w-screen h-screen z-10 bg-black opacity-30" >
 
                     </div>
                 )
@@ -100,9 +100,9 @@ export default function SidebarComponent() {
                 <div className="mt-3 flex flex-col">
                     <span>Envio</span>
                     <p>
-                            Total de envio : s/200 por 41 Polos
+                        Total de envio : s/200 por 41 Polos
                     </p>
-                
+
                 </div>
 
 

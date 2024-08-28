@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { UpdateProduct } from '@/actions/product/update-product';
 import { deleteProductImage } from '@/actions/product/delete-img-product';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 
 
@@ -35,7 +36,7 @@ interface Props {
 }
 
 export default function ProductForm({ categories, tags, product }: Props) {
-
+    const router = useRouter()
     const [error, setError] = useState('')
     const { register, handleSubmit, setValue } = useForm<IFormInput>({
         defaultValues: {
@@ -76,16 +77,20 @@ export default function ProductForm({ categories, tags, product }: Props) {
         if (product?.id) {
             console.log(product.id)
             const resp = await UpdateProduct(formData)
+
             if (resp?.error) {
                 setError(resp.error)
-
             }
+
             console.log(resp)
 
         }
         if (!product?.id) {
             const resp = await CreateProduct(formData)
-            console.log(resp)
+            toast.success(resp?.msg)
+            setTimeout(() => {
+                router.push(`/admin/product/variant/${resp.id}`)
+            }, 2000);
         }
     }
 
@@ -102,94 +107,98 @@ export default function ProductForm({ categories, tags, product }: Props) {
     }
 
     return (
-        <form onSubmit={handleSubmit(setFormulario)}>
-            <span className='text-red-500'>{error}</span>
-            <div className="mb-5">
-                <label className="mb-3 block text-base font-medium text-[#07074D]">
-                    Nombre del producto
-                </label>
-                <input
-                    {...register('name', { required: true })}
-                    placeholder="Nombre del producto"
-                    className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-                />
-            </div>
-
-            <div className="mb-5">
-                <label className="mb-3 block text-base font-medium text-[#07074D]">
-                    Slug
-                </label>
-                <input
-                    {...register('slug', { required: true })}
-                    placeholder="Slug"
-                    className="w-full  rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-                />
-            </div>
-            <div className="mb-5">
-                <label className="mb-3 block text-base font-medium text-[#07074D]">
-                    Descripcion
-                </label>
-                <input
-                    {...register('description', { required: true })}
-                    placeholder="Descripcion"
-                    className="w-full rounde    d-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-                />
-            </div>
-            <div className="mb-5">
-                <label className="mb-3 block text-base font-medium text-[#07074D]">
-                    Categoría
-                </label>
-                <select {...register('category')} className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
-                    {categories.map((category) => (
-                        <option key={category.id} value={category.id}>
-                            {category.name}
-                        </option>
-                    ))}
-                </select>
-            </div>
-
-            <div className="mb-5">
-                <label className="mb-3 block text-base font-medium text-[#07074D]">
-                    Tags
-                </label>
-                <div className="flex gap-3 flex-wrap">
-                    {tags.map((tag) => (
-                        <div key={tag.id} className="flex items-center">
-                            <input
-                                defaultChecked={tagmap.includes(tag.id)}
-                                {...register('tags')}
-                                type="checkbox"
-                                value={tag.id}
-                                className="mr-2 size-5"
-                            />
-                            {tag.name}
-                        </div>
-                    ))}
+        <>
+            <button className='p-2 bg-black text-white mb-2 rounded' onClick={() => router.replace(`/admin/product`)}>regresar</button>
+            <form onSubmit={handleSubmit(setFormulario)}>
+                <span className='text-red-500'>{error}</span>
+                <div className="mb-5">
+                    <label className="mb-3 block text-base font-medium text-[#07074D]">
+                        Nombre del producto
+                    </label>
+                    <input
+                        {...register('name', { required: true })}
+                        placeholder="Nombre del producto"
+                        className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                    />
                 </div>
-            </div>
-            <div className="mb-5">
-                <label className="mb-3 block text-base font-medium text-[#07074D]">Imágenes</label>
-                <ImageUploader setValue={setValue} fieldName="images" />
-            </div>
-            <div className='mb-5 flex flex-wrap gap-4 p-5 border justify-center'>
-                {
-                    (product?.images) ?
-                        product.images.map((image) => (
-                            <div key={image.id} className='relative w-[100px]' onClick={() => eliminarImagen(image.id, image.imageUrl, product.id!)}>
-                                <div className='absolute rounded-full bg-red-500 size-6 text-center flex justify-center items-center cursor-pointer ml-1 mt-1'>
-                                    <span className='text-white'>x
-                                    </span>
-                                </div>
-                                <Image src={image.imageUrl} alt={productexist.name} className='object-cover inset-0 w-full h-full' width={130} height={130} ></Image>
+
+                <div className="mb-5">
+                    <label className="mb-3 block text-base font-medium text-[#07074D]">
+                        Slug
+                    </label>
+                    <input
+                        {...register('slug', { required: true })}
+                        placeholder="Slug"
+                        className="w-full  rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                    />
+                </div>
+                <div className="mb-5">
+                    <label className="mb-3 block text-base font-medium text-[#07074D]">
+                        Descripcion
+                    </label>
+                    <input
+                        {...register('description', { required: true })}
+                        placeholder="Descripcion"
+                        className="w-full rounde    d-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                    />
+                </div>
+                <div className="mb-5">
+                    <label className="mb-3 block text-base font-medium text-[#07074D]">
+                        Categoría
+                    </label>
+                    <select {...register('category')} className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+                        {categories.map((category) => (
+                            <option key={category.id} value={category.id}>
+                                {category.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="mb-5">
+                    <label className="mb-3 block text-base font-medium text-[#07074D]">
+                        Tags
+                    </label>
+                    <div className="flex gap-3 flex-wrap">
+                        {tags.map((tag) => (
+                            <div key={tag.id} className="flex items-center">
+                                <input
+                                    defaultChecked={tagmap.includes(tag.id)}
+                                    {...register('tags')}
+                                    type="checkbox"
+                                    value={tag.id}
+                                    className="mr-2 size-5"
+                                />
+                                {tag.name}
                             </div>
+                        ))}
+                    </div>
+                </div>
+                <div className="mb-5">
+                    <label className="mb-3 block text-base font-medium text-[#07074D]">Imágenes</label>
+                    <ImageUploader setValue={setValue} fieldName="images" />
+                </div>
+                <div className='mb-5 flex flex-wrap gap-4 p-5 border justify-center'>
+                    {
+                        (product?.images) ?
+                            product.images.map((image) => (
+                                <div key={image.id} className='relative w-[100px]' onClick={() => eliminarImagen(image.id, image.imageUrl, product.id!)}>
+                                    <div className='absolute rounded-full bg-red-500 size-6 text-center flex justify-center items-center cursor-pointer ml-1 mt-1'>
+                                        <span className='text-white'>x
+                                        </span>
+                                    </div>
+                                    <Image src={image.imageUrl} alt={productexist.name} className='object-cover inset-0 w-full h-full' width={130} height={130} ></Image>
+                                </div>
 
-                        ))
-                        : ''
-                }
+                            ))
+                            : ''
+                    }
 
-            </div>
-            {/* Segunda instancia de ImageUploader, apuntando a "imagesByColor" */}
-            <button className='bg-black text-white p-2 rounded'>Guardar</button>
-        </form>
+                </div>
+                {/* Segunda instancia de ImageUploader, apuntando a "imagesByColor" */}
+                <button className='bg-black text-white p-2 rounded'>Guardar</button>
+            </form>
+        </>
+
     );
 };

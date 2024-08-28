@@ -33,7 +33,7 @@ export const CreateProduct = async (formData: FormData) => {
   const product = productParsed.data;
   product.slug = product.slug.toLowerCase().replace(/ /g, "-").trim();
   const { id, ...rest } = product;
-
+  let idResp;
   try {
     const primaTx = await prisma.$transaction(async (tx) => {
       // Crear el producto en la base de datos y obtener su ID
@@ -45,9 +45,8 @@ export const CreateProduct = async (formData: FormData) => {
           description: rest.description,
         },
       });
-
+      idResp = productdb.id;
       const productId = productdb.id;
-
       if (rest.tags.length > 0) {
         const tagsData: ProductTag[] = rest.tags.map((tagId) => ({
           productId,
@@ -74,12 +73,14 @@ export const CreateProduct = async (formData: FormData) => {
           })),
         });
       }
-      revalidatePath(`/admin/product/${productdb.id}`);
     });
-
+    revalidatePath(`/admin/product/${idResp}`);
+    revalidatePath(`/admin/product`);
     return {
       ok: true,
+      msg: "Producto Creado",
       primaTx,
+      id: idResp,
     };
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {

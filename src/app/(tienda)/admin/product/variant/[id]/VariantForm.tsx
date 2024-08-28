@@ -9,6 +9,7 @@ import { deleteColorProduct } from "@/actions/color-product-variant/delete-color
 import { ProductSizeVariant } from "@/interfaces/product.size.variant";
 import { createSizeProduct } from "@/actions/size-color-variant/create-size-product";
 import { deleteSizeProduct } from "@/actions/size-color-variant/delete-size-variant";
+import { useRouter } from "next/navigation";
 
 interface Product {
     id: string;
@@ -44,6 +45,7 @@ export default function VariantForm({ product, colors, sizes, colorsProduct, siz
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [tsize, setSise] = useState('')
     const [tprice, setPrice] = useState(0)
+    const rounter =useRouter()
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
@@ -253,7 +255,9 @@ export default function VariantForm({ product, colors, sizes, colorsProduct, siz
                     ))
                 }
             </div>
-
+            <div className="flex justify-center">
+                <button className="p-2 bg-black text-white uppercase rounded-sm" onClick={()=>rounter.replace('/admin/product')}>regresar</button>
+            </div>
         </div>
     );
 }
