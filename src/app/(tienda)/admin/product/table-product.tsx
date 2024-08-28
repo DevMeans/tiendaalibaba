@@ -1,6 +1,9 @@
 'use client'
+
+import { deleteProduct } from '@/actions/product/eliminar-producto';
 import { ChangeEstado } from '@/actions/product/estado-product';
 import Image from 'next/image';
+import { redirect, useRouter } from 'next/navigation';
 
 import { toast } from 'sonner'
 interface product {
@@ -23,10 +26,19 @@ interface Props {
 }
 
 export default function TableProduct({ products }: Props) {
+    const router = useRouter()
     console.log('resp', products)
     const changeEstado = async (id: string, estado: any) => {
         const resp = await ChangeEstado(id, estado)
         toast.info(resp?.msg)
+    }
+    const onclick = (id: string) => {
+        console.log(id)
+        router.push(`/admin/product/variant/${id}`)
+    }
+    const ondelete = async (id: string) => {
+        const deleteProductid = await deleteProduct(id)
+        console.log(deleteProductid)
     }
     return (
         <table className="w-full text-left">
@@ -41,6 +53,7 @@ export default function TableProduct({ products }: Props) {
                     <th>
                         estado
                     </th>
+                    <th>variantes</th>
                     <th>
                         eliminar
                     </th>
@@ -62,7 +75,10 @@ export default function TableProduct({ products }: Props) {
                                 </select>
                             </td>
                             <td>
-                                <button className='px-1 bg-red-500 text-white text-sm rounded-md font-semibold'>x
+                                <span className='bg-green-500 text-white p-1 text-xs rounded cursor-pointer' onClick={() => onclick(product.id)}>variantes</span>
+                            </td>
+                            <td>
+                                <button onClick={() => ondelete(product.id)} className='px-1 bg-red-500 text-white text-sm rounded-md font-semibold'>x
                                 </button>
                             </td>
                         </tr>
