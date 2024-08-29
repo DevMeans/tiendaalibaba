@@ -14,13 +14,32 @@ import './styles.css';
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
 import { Swiper as SwiperClass } from 'swiper';
 import Image from 'next/image';
-export default function SwiperProductComponent() {
+
+interface Product {
+    id: string;
+    name: string;
+    description: string;
+    slug: string;
+    categoryId: string;
+    estado: string
+    images: ProductImage[];
+}
+
+export interface ProductImage {
+    id: string;
+    productId: string;
+    imageUrl: string;
+}
+interface Props {
+    product: Product
+}
+export default function SwiperProductComponent({ product }: Props) {
+    const { images } = product
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
     return (
         <>
             <Swiper
                 style={{
-
                 }}
                 loop={true}
                 spaceBetween={10}
@@ -29,16 +48,14 @@ export default function SwiperProductComponent() {
                 modules={[FreeMode, Navigation, Thumbs]}
                 className="mySwiper2"
             >
-                <SwiperSlide>
-                    <Image src="https://s.alicdn.com/@sc04/kf/Ha2c3a8377db3420a9a11b11495421e9aI.jpg" width={500} height={500} alt='' />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <Image src="https://s.alicdn.com/@sc04/kf/H72a1e3bc39a043789e809d3babd8bb251.jpg" width={500} height={500} alt='' />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <Image src="https://s.alicdn.com/@sc04/kf/H985f6e0614034c91b9d8e7bcf422bab7J.jpg" width={500} height={500} alt='' />
-                </SwiperSlide>
+                {
+                    images.map((image) => (
 
+                        <SwiperSlide key={image.id}>
+                            <Image src={image.imageUrl} width={500} height={500} alt={product.name} />
+                        </SwiperSlide>
+                    ))
+                }
             </Swiper>
             <Swiper
                 onSwiper={setThumbsSwiper}
@@ -50,15 +67,13 @@ export default function SwiperProductComponent() {
                 modules={[FreeMode, Navigation, Thumbs]}
                 className="mySwiper"
             >
-                <SwiperSlide>
-                    <Image src="https://s.alicdn.com/@sc04/kf/Ha2c3a8377db3420a9a11b11495421e9aI.jpg" width={500} height={500} alt='' />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <Image src="https://s.alicdn.com/@sc04/kf/H72a1e3bc39a043789e809d3babd8bb251.jpg" width={500} height={500} alt='' />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <Image src="https://s.alicdn.com/@sc04/kf/H985f6e0614034c91b9d8e7bcf422bab7J.jpg" width={500} height={500} alt='' />
-                </SwiperSlide>
+                {
+                    images.map((image) => (
+                        <SwiperSlide key={image.id} >
+                            <Image src={image.imageUrl} width={500} height={500} alt={product.name} />
+                        </SwiperSlide>
+                    ))
+                }
             </Swiper>
         </>
     );

@@ -18,7 +18,7 @@ interface Product {
     slug: string;
     categoryId: string;
     images: ProductImage[];
-    variants: any[];
+
 }
 
 export interface ProductImage {
