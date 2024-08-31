@@ -65,7 +65,6 @@ export const useCartStore = create<State>()(
           );
 
           if (existingCartItemIndex !== -1) {
-            // Si el producto ya existe en el carrito, buscar la combinación de color y talla
             const existingCartItem = state.cart[existingCartItemIndex];
             const existingVariantIndex = existingCartItem.carrito.findIndex(
               (variant) =>
@@ -73,40 +72,53 @@ export const useCartStore = create<State>()(
             );
 
             if (existingVariantIndex !== -1) {
-              // Si la combinación de color y talla ya existe, incrementar la cantidad
-              const updatedCart = [...state.cart];
-              updatedCart[existingCartItemIndex].carrito[
-                existingVariantIndex
-              ].quantity += quantity;
-              return { cart: updatedCart };
+              // Si la combinación de color y talla ya existe
+              const updatedQuantity =
+                existingCartItem.carrito[existingVariantIndex].quantity +
+                quantity;
+
+              if (updatedQuantity >= 0) {
+                // Solo actualiza si la cantidad es mayor que 0
+                const updatedCart = [...state.cart];
+                updatedCart[existingCartItemIndex].carrito[
+                  existingVariantIndex
+                ].quantity = updatedQuantity;
+                return { cart: updatedCart };
+              }
             } else {
-              // Si la combinación de color y talla no existe, añadirla al carrito del producto
-              const updatedCart = [...state.cart];
-              updatedCart[existingCartItemIndex].carrito.push({
-                color,
-                size,
-                quantity,
-              });
-              return { cart: updatedCart };
+              // Si la combinación de color y talla no existe
+              if (quantity > 0) {
+                const updatedCart = [...state.cart];
+                updatedCart[existingCartItemIndex].carrito.push({
+                  color,
+                  size,
+                  quantity,
+                });
+                return { cart: updatedCart };
+              }
             }
           } else {
-            // Si el producto no existe en el carrito, añadirlo con la combinación de color y talla
-            return {
-              cart: [
-                ...state.cart,
-                {
-                  product,
-                  carrito: [
-                    {
-                      color,
-                      size,
-                      quantity,
-                    },
-                  ],
-                },
-              ],
-            };
+            // Si el producto no existe en el carrito
+            if (quantity > 0) {
+              return {
+                cart: [
+                  ...state.cart,
+                  {
+                    product,
+                    carrito: [
+                      {
+                        color,
+                        size,
+                        quantity,
+                      },
+                    ],
+                  },
+                ],
+              };
+            }
           }
+
+          return state; // No hacer ningún cambio si la cantidad es menor o igual a 0
         });
       },
 
