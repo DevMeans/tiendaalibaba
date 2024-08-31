@@ -1,4 +1,3 @@
-import { Decimal } from "@prisma/client/runtime/library";
 
 export interface ProductSizeVariant {
   id?: string;
@@ -10,5 +9,5 @@ export interface ProductSizeVariant {
 export interface size {
   id: string;
   name: string;
-  estado: "ACTIVO" | "INACTIVO";
+  estado: string;
 }

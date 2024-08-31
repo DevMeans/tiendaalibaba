@@ -11,7 +11,6 @@ export default function RootLayout({
 
     <>
       <NavbarComponent></NavbarComponent>
-      <SidebarComponent></SidebarComponent>
       <main>
         {children}
       </main>

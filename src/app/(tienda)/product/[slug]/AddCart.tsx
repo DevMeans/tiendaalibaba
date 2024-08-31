@@ -1,9 +1,12 @@
 'use client'
+import SidebarComponent from "@/app/components/sidebar/Sidebar";
 import SwiperProductComponent from "@/app/components/swiper/Swiper";
 import { Color } from "@/interfaces/color.interface";
 import { Size } from "@/interfaces/size.interface";
 import { useUIStore } from "@/store";
+import { useCartStore } from "@/store/cart/cart-store";
 import Image from "next/image";
+import { useEffect } from "react";
 interface ProductImage {
     id: string;
     productId: string;
@@ -42,9 +45,9 @@ interface Props {
 }
 
 export default function AddCartPage({ product }: Props) {
-    console.log(product)
     const { ProductColorVariant, ProductSizeVariant } = product
     const openSideMenu = useUIStore(state => state.openSideMenu)
+
     return (
         <>
             <div className="">
@@ -66,13 +69,11 @@ export default function AddCartPage({ product }: Props) {
                     </div>
                     <div className='flex flex-col gap-3 mt-4'>
                         <span>1. Color (17) : 1</span>
-                        <div className='flex flex-wrap'>
-                            <Image onClick={() => openSideMenu()} className='border-[2px] border-[black] cursor-pointer' alt='' src={`https://sc04.alicdn.com/kf/H31d890cdd45742e3b2ceedc812818fffY.jpg`} width={60} height={60}></Image>
-                            {
-                                ProductColorVariant.map((color) => (
-                                    <Image key={color.id} onClick={() => openSideMenu()} alt='' src={color.imageUrl} width={60} height={60}></Image>
-                                ))
-                            }
+                        <div className='flex flex-wrap'> {
+                            ProductColorVariant.map((color) => (
+                                <Image key={color.id} onClick={() => openSideMenu()} alt='' src={color.imageUrl} width={60} height={60}></Image>
+                            ))
+                        }
                         </div>
                         <div className='flex flex-col gap-3'>
                             <span>2.Talla (8) </span>
@@ -84,8 +85,6 @@ export default function AddCartPage({ product }: Props) {
                                         </div>
                                     ))
                                 }
-
-
                             </div>
                         </div>
                     </div>
@@ -104,6 +103,7 @@ export default function AddCartPage({ product }: Props) {
                     <button className='p-2 bg-black text-white mt-5'>Iniciar Pedido</button>
                 </div>
             </div>
+            <SidebarComponent sidebar={product}></SidebarComponent>
         </>
     );
 }
