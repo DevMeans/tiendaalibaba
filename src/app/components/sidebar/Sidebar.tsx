@@ -150,7 +150,7 @@ export default function SidebarComponent({ sidebar }: Props) {
                                                     className="absolute left-0 flex items-center justify-center w-8 h-8 text-lg font-bold border rounded-full hover:bg-gray-200 focus:outline-none">
                                                     -
                                                 </button>
-                                                <input key={`${r}s`} type="number" value={savedQuantity} className="w-full text-center focus:outline-none" />
+                                                <input key={`${r}s`} type="number" value={savedQuantity} className="w-full text-center focus:outline-none disabled" />
                                                 <button
                                                     onClick={() => onClickSize(r, 1)}
                                                     className="absolute right-0 flex items-center justify-center w-8 h-8 text-lg font-bold border rounded-full hover:bg-gray-200 focus:outline-none">
