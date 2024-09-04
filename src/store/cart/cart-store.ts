@@ -24,15 +24,17 @@ interface ProductSizeVariant {
   price: number;
   size: Size;
 }
+
 interface Product {
   id: string;
   name: string;
   description: string;
   slug: string;
   categoryId: string;
-  estado: string; // Puedes ajustar los estados según lo que necesites
+  estado: string;
   images: ProductImage[];
 }
+
 interface CartItem {
   product: Product;
   carrito: {
@@ -44,13 +46,20 @@ interface CartItem {
 
 interface State {
   cart: CartItem[];
-  addProductToCart: (
+  addProductCart: (
     product: Product,
     color: ProductColorVariant,
     size: ProductSizeVariant,
     quantity: number
   ) => void;
+  updateProductCart: (
+    productId: string,
+    sizeId: string,
+    colorId: string,
+    quantity: number
+  ) => void;
   getCart: () => CartItem[];
+  removeProduct: (colorId: string, productId: string, sizeId: string) => void;
   clearCart: () => void;
 }
 
@@ -58,74 +67,77 @@ export const useCartStore = create<State>()(
   persist(
     (set, get) => ({
       cart: [],
-      addProductToCart(product, color, size, quantity) {
-        set((state) => {
-          const existingCartItemIndex = state.cart.findIndex(
-            (item) => item.product.id === product.id
+      addProductCart(product, color, size, quantity) {
+        const { cart } = get();
+        const existingCartItem = cart.find(
+          (item) => item.product.id === product.id
+        );
+
+        if (existingCartItem) {
+          const existingVariant = existingCartItem.carrito.find(
+            (variant) =>
+              variant.color.id === color.id && variant.size.id === size.id
           );
 
-          if (existingCartItemIndex !== -1) {
-            const existingCartItem = state.cart[existingCartItemIndex];
-            const existingVariantIndex = existingCartItem.carrito.findIndex(
-              (variant) =>
-                variant.color.id === color.id && variant.size.id === size.id
-            );
-
-            if (existingVariantIndex !== -1) {
-              // Si la combinación de color y talla ya existe
-              const updatedQuantity =
-                existingCartItem.carrito[existingVariantIndex].quantity +
-                quantity;
-
-              if (updatedQuantity >= 0) {
-                // Solo actualiza si la cantidad es mayor que 0
-                const updatedCart = [...state.cart];
-                updatedCart[existingCartItemIndex].carrito[
-                  existingVariantIndex
-                ].quantity = updatedQuantity;
-                return { cart: updatedCart };
-              }
-            } else {
-              // Si la combinación de color y talla no existe
-              if (quantity > 0) {
-                const updatedCart = [...state.cart];
-                updatedCart[existingCartItemIndex].carrito.push({
-                  color,
-                  size,
-                  quantity,
-                });
-                return { cart: updatedCart };
-              }
-            }
+          if (existingVariant) {
+            existingVariant.quantity += quantity;
+            set({ cart: [...cart] });
           } else {
-            // Si el producto no existe en el carrito
-            if (quantity > 0) {
-              return {
-                cart: [
-                  ...state.cart,
-                  {
-                    product,
-                    carrito: [
-                      {
-                        color,
-                        size,
-                        quantity,
-                      },
-                    ],
-                  },
-                ],
-              };
-            }
+            existingCartItem.carrito.push({ color, size, quantity });
+            set({ cart: [...cart] });
           }
-
-          return state; // No hacer ningún cambio si la cantidad es menor o igual a 0
-        });
+        } else {
+          set({
+            cart: [
+              ...cart,
+              {
+                product,
+                carrito: [{ color, size, quantity }],
+              },
+            ],
+          });
+        }
       },
+      updateProductCart(productId, sizeId, colorId, quantity) {
+        const { cart } = get();
+        const updateCart = cart.map((item) => {
+          if (item.product.id === productId) {
+            return {
+              ...item,
+              carrito: item.carrito.map((variant) =>
+                variant.color.id === colorId && variant.size.id === sizeId
+                  ? { ...variant, quantity }
+                  : variant
+              ),
+            };
+          }
+          return item;
+        });
 
+        set({ cart: updateCart });
+      },
+      removeProduct(colorId, productId, sizeId) {
+        const { cart } = get();
+        const updatedCart = cart
+          .map((item) => ({
+            ...item,
+            carrito: item.carrito.filter(
+              (variant) =>
+                variant.color.id !== colorId ||
+                variant.size.id !== sizeId ||
+                item.product.id !== productId
+            ),
+          }))
+          .filter((item) => item.carrito.length > 0);
+
+        set({ cart: updatedCart });
+      },
       getCart() {
         return get().cart;
       },
-      clearCart: () => set({ cart: [] }),
+      clearCart() {
+        set({ cart: [] });
+      },
     }),
     {
       name: "shopping-cart",

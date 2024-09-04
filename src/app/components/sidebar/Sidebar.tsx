@@ -1,4 +1,5 @@
 'use client'
+
 import { IoMdClose } from "react-icons/io";
 import { useUIStore } from '@/store';
 import clsx from "clsx";
@@ -19,7 +20,7 @@ interface ProductColorVariant {
     productId: string;
     colorId: string;
     imageUrl: string;
-    color: Color
+    color: Color;
 }
 
 interface ProductSizeVariant {
@@ -27,7 +28,7 @@ interface ProductSizeVariant {
     productId: string;
     sizeId: string;
     price: number;
-    size: Size
+    size: Size;
 }
 
 interface Product {
@@ -49,27 +50,27 @@ interface Props {
 export default function SidebarComponent({ sidebar }: Props) {
     const isSideMenuOpen = useUIStore(state => state.isSideOpenMenu);
     const closeMenu = useUIStore(state => state.closeSideMenu);
-    const addcart = useCartStore((state) => state.addProductToCart);
-    const getcart = useCartStore((state) => state.getCart);
+    const addcart = useCartStore((state) => state.addProductCart);
+    const getcart = useCartStore((state) => state.cart);
     const [color, setColor] = useState<ProductColorVariant | null>(null);
-    const [cartItems, setCartItems] = useState(() => getcart());
+    const [cartItems, setCartItems] = useState(getcart);
 
     useEffect(() => {
-        if (sidebar.ProductColorVariant.length > 0) {
-            setColor(sidebar.ProductColorVariant[0]);
+        if (sidebar.ProductColorVariant.length > 0 && !color) {
+            setColor(sidebar.ProductColorVariant[0]); // Selecciona el primer color solo si no hay un color ya seleccionado
         }
-        setCartItems(getcart());
-    }, [sidebar, getcart]);
+        setCartItems(getcart);
+    }, [sidebar, getcart, color]);
 
     const onClickImage = (item: ProductColorVariant) => {
-        setColor(item);
+        setColor(item); // Al hacer clic en una imagen, cambia el color seleccionado
     };
 
     const onClickSize = (size: ProductSizeVariant, cantidad: number) => {
         if (!color) return;
 
         addcart(sidebar, color, size, cantidad);
-        setCartItems(getcart());
+        setCartItems(getcart);
     };
 
     return (
