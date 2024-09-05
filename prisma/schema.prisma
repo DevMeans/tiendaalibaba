@@ -44,12 +44,13 @@ model Product {
 }
 
 model ProductSizeVariant {
-  id        String  @id @default(uuid())
-  product   Product @relation(fields: [productId], references: [id])
+  id        String      @id @default(uuid())
+  product   Product     @relation(fields: [productId], references: [id])
   productId String
-  size      Size    @relation(fields: [sizeId], references: [id])
+  size      Size        @relation(fields: [sizeId], references: [id])
   sizeId    String
   price     Float
+  OrderItem OrderItem[]
 }
 
 enum TypeEstado {
@@ -80,12 +81,13 @@ model ProductImage {
 }
 
 model ProductColorVariant {
-  id        String  @id @default(uuid())
-  product   Product @relation(fields: [productId], references: [id])
+  id        String      @id @default(uuid())
+  product   Product     @relation(fields: [productId], references: [id])
   productId String
-  color     Color   @relation(fields: [colorId], references: [id])
+  color     Color       @relation(fields: [colorId], references: [id])
   colorId   String
   imageUrl  String
+  OrderItem OrderItem[]
 }
 
 model Tag {
@@ -119,10 +121,14 @@ model Order {
 }
 
 model OrderItem {
-  id       String @id @default(uuid())
-  order    Order  @relation(fields: [orderId], references: [id])
-  orderId  String
-  quantity Int
+  id                    String              @id @default(uuid())
+  order                 Order               @relation(fields: [orderId], references: [id])
+  orderId               String
+  quantity              Int
+  productColorVariant   ProductColorVariant @relation(fields: [productColorVariantId], references: [id])
+  productColorVariantId String
+  productSizeVariant    ProductSizeVariant  @relation(fields: [productSizeVariantId], references: [id])
+  productSizeVariantId  String
 }
 
 model User {
@@ -136,6 +142,18 @@ model User {
   reviews            Review[]
   requestedTransfers WarehouseTransfer[] @relation("RequestedByUser")
   approvedTransfers  WarehouseTransfer[] @relation("ApprovedByUser")
+  UserAddress UserAddress[]
+}
+
+model UserAddress {
+  id        String  @id @default(uuid())
+  nombres   String
+  apellidos String
+  direccion String
+  detalles  String?
+  phone     String
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String
 }
 
 model Promotion {
