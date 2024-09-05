@@ -104,8 +104,8 @@ export default async function OrderIdPage({ params }: Props) {
             currency: "PEN",
           })}
       </div>
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white">
+      <div className="overflow-auto">
+        <table className="min-w-full bg-white ">
           <thead>
             <tr>
               <th scope="col" className="py-2 px-4 border-b">
