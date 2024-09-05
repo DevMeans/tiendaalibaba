@@ -82,7 +82,10 @@ export default function AdressFormComponent() {
       
         console.log(data);
         console.log(transformedCartItems);
-        await createOrder(transformedCartItems,data)
+        const order =  await createOrder(transformedCartItems,data)
+        if(order.ok){
+            
+        }
     };
     return (
         <form onSubmit={handleSubmit(onSubmit)}>

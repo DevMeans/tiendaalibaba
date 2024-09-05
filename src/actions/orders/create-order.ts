@@ -52,7 +52,7 @@ export const createOrder = async (
           customerEmail: session.user.email,
           deliveryAddress: address.direccion,
           phoneNumber: address.phone,
-          notes: address.apellidos,
+          notes: address.detalles,
           isRegisteredUser: true,
         },
       });
