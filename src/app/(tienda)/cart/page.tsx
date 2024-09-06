@@ -2,6 +2,7 @@
 
 import { useCartStore } from "@/store/cart/cart-store";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface Variant {
@@ -25,6 +26,7 @@ interface CartItem {
 }
 
 export default function CartPage() {
+    const router = useRouter()
     const [isMounted, setIsMounted] = useState(false);
     const cartItems = useCartStore(state => state.getCart());
 
@@ -48,9 +50,15 @@ export default function CartPage() {
 
     return (
         <div className="max-w-[1200px] m-auto p-5">
-            <div className="m-5">
-                <h1>Carrito de compras</h1>
-                <span>Total: S/{total}</span> {/* Mostrar el total dinámico aquí */}
+            <div className="m-5 flex justify-between gap-3">
+                <div>
+                    <h1>Carrito de compras</h1>
+                    <span>Total: S/{total}</span>
+                </div>
+                <div>
+                    <button className="p-2 text-white bg-black" onClick={()=>router.push('/address')}>Hacer pedido</button>
+                </div>
+                {/* Mostrar el total dinámico aquí */}
             </div>
             <table className='w-full'>
                 <thead className='bg-slate-200 text-left'>

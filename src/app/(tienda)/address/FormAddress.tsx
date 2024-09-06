@@ -3,6 +3,9 @@
 import { useForm } from "react-hook-form";
 import { useCartStore } from "@/store/cart/cart-store";
 import { createOrder } from "@/actions/orders/create-order";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+
 
 export interface Product {
     product: ProductClass;
@@ -64,11 +67,12 @@ interface UserAddress {
     phone: string
     userId: string
 }
- 
+
 export default function AdressFormComponent() {
+    const router = useRouter()
     const { register, handleSubmit, formState: { errors } } = useForm<UserAddress>();
     const cartItems = useCartStore(state => state.getCart());
-
+    const cleanCart = useCartStore(state => state.clearCart)
     const transformedCartItems = cartItems.map(item => {
         return item.carrito.map(carritoItem => ({
             productId: item.product.id,
@@ -79,12 +83,19 @@ export default function AdressFormComponent() {
     }).flat();
 
     const onSubmit = async (data: any) => {
-      
+
         console.log(data);
         console.log(transformedCartItems);
-        const order =  await createOrder(transformedCartItems,data)
-        if(order.ok){
-            
+        const order = await createOrder(transformedCartItems, data)
+
+        if (order.ok) {
+            cleanCart()
+            toast.info('Pedido hecho exitosamente')
+            setTimeout(() => {
+                router.push(`/orders`)
+            }, 2000);
+        } else {
+            toast.error('Hubo un problema con el pedido')
         }
     };
     return (

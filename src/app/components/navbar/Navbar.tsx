@@ -9,8 +9,8 @@ export default function NavbarComponent() {
             </div>
             <div className="flex flex-col sm:flex-row gap-3" >
                 <nav className="flex gap-2 sm:gap-6 uppercase ">
-                    <Link href={'#'} className="block">Tienda</Link>
-                    <Link href={'#'} className="block">nosotros</Link>
+                    <Link href={'/'} className="block">Tienda</Link>
+                    <Link href={'/orders'} className="block">Pedidos</Link>
                     <Link href={'#'} className="block whitespace-nowrap">como hacer pedidos</Link>
                 </nav>
                 <div className="flex justify-center gap-3">

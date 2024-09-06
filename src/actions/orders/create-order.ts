@@ -2,6 +2,7 @@
 
 import { auth } from "@/auth.config";
 import prisma from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 
 export interface Product {
   productId: string;
@@ -70,6 +71,7 @@ export const createOrder = async (
 
       return order;
     });
+    revalidatePath("/orders");
     return {
       ok: true,
       message: "Order hecha con exito",

@@ -8,6 +8,7 @@ import { useCartStore } from "@/store/cart/cart-store";
 import { useEffect, useState } from "react";
 import { Color } from "@/interfaces/color.interface";
 import { Size } from "@/interfaces/size.interface";
+import { useRouter } from "next/navigation";
 
 interface ProductImage {
     id: string;
@@ -48,6 +49,7 @@ interface Props {
 }
 
 export default function SidebarComponent({ sidebar }: Props) {
+    const router = useRouter()
     const isSideMenuOpen = useUIStore(state => state.isSideOpenMenu);
     const closeMenu = useUIStore(state => state.closeSideMenu);
     const addcart = useCartStore((state) => state.addProductCart);
@@ -163,10 +165,10 @@ export default function SidebarComponent({ sidebar }: Props) {
                 </div>
 
                 <div className="mt-3 flex flex-col">
-                    <span>Envio</span>
-                    <p>
-                        Total de envio: S/200 por 41 Polos
-                    </p>
+                    <button className="p-2 bg-black text-white" onClick={() => router.push('/cart')}>
+                        Fijar pedido
+                    </button>
+
                 </div>
             </div>
         </div>
