@@ -57,7 +57,7 @@ export default async function OrderIdPage({ params }: Props) {
   const { id } = params;
   const order = await getOrderById(id);
   if (!order) {
-    return null; //TODO ACA REDIRECCIONAR
+    return <div> esta orden no existe</div>
   }
   return (
     <div className="max-w-[1200px] m-auto p-5">
