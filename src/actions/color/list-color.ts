@@ -9,3 +9,16 @@ export const ListColor = async () => {
     return [];
   }
 };
+export const ListColorPublic = async () => {
+  try {
+    const listColor = await prisma.color.findMany({
+      where: {
+        estado: "ACTIVO",
+      },
+    });
+    return listColor;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
