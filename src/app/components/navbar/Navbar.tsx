@@ -1,9 +1,13 @@
 import Link from "next/link"
 import { RiShoppingCartLine } from "react-icons/ri";
 import { FaRegUser } from "react-icons/fa";
-export default function NavbarComponent() {
+import { auth } from "@/auth.config";
+export default async function NavbarComponent() {
+
+    const session = await auth()
+    console.log(session)
     return (
-        <div className="flex flex-col sm:flex-row items-center sm:justify-between max-w-[1200px] m-auto text-sm sm:text-lg font-bold p-5">
+        <div className="flex flex-col sm:flex-row items-center sm:justify-between max-w-[1200px] m-auto text-sm sm:text-base font-bold p-5">
             <div>
                 BillSurft
             </div>
@@ -11,7 +15,12 @@ export default function NavbarComponent() {
                 <nav className="flex gap-2 sm:gap-6 uppercase ">
                     <Link href={'/'} className="block">Tienda</Link>
                     <Link href={'/orders'} className="block">Pedidos</Link>
-                    <Link href={'#'} className="block whitespace-nowrap">como hacer pedidos</Link>
+                    {
+                        (session?.user.role == 'SUPER_USER') ? <>
+                            <Link href={'/admin/product'} className="block">Productos</Link>
+                            <Link href={'/admin/variants'} className="block">Variantes</Link>
+                        </> : <></>
+                    }
                 </nav>
                 <div className="flex justify-center gap-3">
                     <RiShoppingCartLine fontSize={20} />

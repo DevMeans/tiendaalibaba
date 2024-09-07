@@ -12,7 +12,11 @@ export const getOrders = async () => {
     }
     const rol = session?.user.role;
     if (rol == "SUPER_USER") {
-      const orders = await prisma.order.findMany();
+      const orders = await prisma.order.findMany({
+        orderBy:{
+          orderDate:'desc'
+        }
+      });
       return {
         ok: true,
         orders,
@@ -22,6 +26,9 @@ export const getOrders = async () => {
         where: {
           userId: session?.user.id,
         },
+        orderBy:{
+          orderDate:'desc'
+        }
       });
       return {
         ok: true,
