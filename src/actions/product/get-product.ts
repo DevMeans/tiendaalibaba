@@ -17,6 +17,9 @@ export const getProduct = async () => {
 export const getPublicProduct = async () => {
   try {
     const resp = await prisma.product.findMany({
+      where: {
+        estado: "ACTIVO",
+      },
       include: {
         images: true,
         ProductSizeVariant: true,

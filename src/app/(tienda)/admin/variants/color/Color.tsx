@@ -5,6 +5,7 @@ import { Color } from "@/interfaces/color.interface";
 import { useState } from "react";
 import { DeleteColor } from "@/actions/color";
 import { Toaster, toast } from 'sonner'
+import { editarEstado } from "@/actions/color/editar-estado";
 interface Props {
     colors: Color[]
 }
@@ -21,6 +22,10 @@ export const ColorComponent = ({ colors }: Props) => {
     const deleteColor = async (id: string) => {
         const resp = await DeleteColor(id)
         toast.error(resp.msg)
+    }
+    const onclickEstadodb = async (id: string, estado: 'ACTIVO' | 'INACTIVO') => {
+        const estadodb = await editarEstado(id, estado)
+        console.log(estadodb)
     }
     return (
         <>
@@ -69,7 +74,7 @@ export const ColorComponent = ({ colors }: Props) => {
                                     </td>
                                     <td>
 
-                                        {(color.estado == "ACTIVO") ? <span className="text-white bg-green-500 text-sm p-1 rounded-lg">{color.estado}</span> : <span className="text-white bg-red-500 text-sm p-1 rounded-lg">{color.estado}</span>}
+                                        {(color.estado == "ACTIVO") ? <span className="text-white bg-green-500 text-sm p-1 rounded-lg cursor-pointer" onClick={() => onclickEstadodb(color.id, color.estado)}>{color.estado}</span> : <span onClick={() => onclickEstadodb(color.id, color.estado)} className="text-white bg-red-500 text-sm p-1 rounded-lg cursor-pointer">{color.estado}</span>}
                                     </td>
                                     <td>
                                         <button className="px-2 py-1 bg-red-500 text-white font-bold rounded-md" onClick={() => deleteColor(color.id!)}>

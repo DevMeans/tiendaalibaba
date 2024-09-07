@@ -7,6 +7,7 @@ import { DeleteSize } from "@/actions/size";
 import { toast } from "sonner";
 import { Category } from "@/interfaces/category.interface";
 import { DeleteCategory } from "@/actions/category";
+import { editarEstado } from "@/actions/category/editar-estado";
 interface Props {
     categories: Category[]
 }
@@ -22,6 +23,10 @@ export const CategoryComponent = ({ categories }: Props) => {
     const deleteCategory = async (id: string) => {
         const resp = await DeleteCategory(id)
         toast.error(resp.msg)
+    }
+    const onclickEstado = async (id: string, estado: 'ACTIVO' | 'INACTIVO') => {
+        const estadodb = await editarEstado(id, estado)
+        console.log(estadodb)
     }
     return (
         <>
@@ -58,8 +63,7 @@ export const CategoryComponent = ({ categories }: Props) => {
                                         {category.name}
                                     </td>
                                     <td>
-
-                                        {(category.estado == "ACTIVO") ? <span className="text-white bg-green-500 text-sm p-1 rounded-lg">{category.estado}</span> : <span className="text-white bg-red-500 text-sm p-1 rounded-lg">{category.estado}</span>}
+                                        {(category.estado == "ACTIVO") ? <span onClick={() => onclickEstado(category.id, category.estado)} className="text-white bg-green-500 text-sm p-1 rounded-lg cursor-pointer">{category.estado}</span> : <span onClick={() => onclickEstado(category.id, category.estado)} className="text-white bg-red-500 text-sm p-1 rounded-lg cursor-pointer">{category.estado}</span>}
                                     </td>
                                     <td>
                                         <button className="px-2 py-1 bg-red-500 text-white font-bold rounded-md" onClick={() => deleteCategory(category.id!)}>

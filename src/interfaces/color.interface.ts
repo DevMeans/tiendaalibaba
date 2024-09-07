@@ -2,5 +2,5 @@ export interface Color {
   id: string;
   name: string;
   hexCode: string;
-  estado: string;
+  estado: "ACTIVO" | "INACTIVO";
 }
