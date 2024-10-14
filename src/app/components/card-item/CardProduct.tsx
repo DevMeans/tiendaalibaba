@@ -46,7 +46,7 @@ export default function CardProductComponent({ product }: Props) {
                 </h2>
                 <p className='mb-2'>
                 </p>
-                <button className='p-2 bg-black text-white font-bold' onClick={()=>router.push(`/product/${product.slug}`)} >Detalles</button>
+                <button className='p-2 bg-black text-white font-bold' onClick={()=>router.push(`/product/${product.slug}`)} >Ver ...</button>
             </div>
         </div>
     );

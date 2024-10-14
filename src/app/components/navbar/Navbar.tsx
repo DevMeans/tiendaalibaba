@@ -8,7 +8,7 @@ export default async function NavbarComponent() {
     console.log(session)
     return (
         <div className="flex flex-col sm:flex-row items-center sm:justify-between max-w-[1200px] m-auto text-sm sm:text-base font-bold p-5">
-            <div>
+            <div className="text-2xl mb-3 sm:mb-0 font-extrabold">
                 BillSurft
             </div>
             <div className="flex flex-col sm:flex-row gap-3" >

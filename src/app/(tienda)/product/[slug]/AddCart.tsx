@@ -6,6 +6,7 @@ import { Size } from "@/interfaces/size.interface";
 import { useUIStore } from "@/store";
 import { useCartStore } from "@/store/cart/cart-store";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 interface ProductImage {
     id: string;
@@ -45,6 +46,7 @@ interface Props {
 }
 
 export default function AddCartPage({ product }: Props) {
+    const router = useRouter()
     const { ProductColorVariant, ProductSizeVariant } = product
     const openSideMenu = useUIStore(state => state.openSideMenu)
 
@@ -52,14 +54,14 @@ export default function AddCartPage({ product }: Props) {
         <>
             <div className="">
                 <div className='font-semibold'>
-                    Camiseta de poliéster 100%, camiseta Polo de Golf
+                    {product.name}
                 </div>
                 <SwiperProductComponent product={product} ></SwiperProductComponent>
             </div>
             <div className='p-5  divide-y rounded-md'>
                 <div>
                     <span className='font-semibold text-xl'>
-                        Precio : S/20
+                        S/. {product.ProductSizeVariant[0].price}
                     </span>
                 </div>
                 <div>
@@ -100,7 +102,7 @@ export default function AddCartPage({ product }: Props) {
                         Total del envío: $18.86 por 2 piezas
                         Entrega estimada oct.15
                     </div>
-                    <button className='p-2 bg-black text-white mt-5'>Iniciar Pedido</button>
+                    <button className='p-2 bg-black text-white mt-5' onClick={() => openSideMenu()} >Iniciar Pedido</button>
                 </div>
             </div>
             <SidebarComponent sidebar={product}></SidebarComponent>

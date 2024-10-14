@@ -92,7 +92,6 @@ export default async function OrderIdPage({ params }: Props) {
       </div>
       <div className="w-full border my-4"></div>
       <div className="text-right font-semibold text-lg">
-        Total Pedido: S/
         {order.items
           .reduce(
             (total, item) =>
