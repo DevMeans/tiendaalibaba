@@ -6,7 +6,7 @@ import prisma from "@/lib/prisma";
 import { Size } from "@/interfaces/size.interface";
 
 export const editSize = async (formdata: FormData) => {
-  const data: Partial<Size> = {};
+  const data: any = {};
   formdata.forEach((value, key) => {
     (data as any)[key] = value;
   });
