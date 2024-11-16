@@ -5,7 +5,10 @@ import { useEffect } from "react";
 import clsx from "clsx";
 import { authenticate } from "@/actions/auth/login";
 import { IoInformationOutline } from 'react-icons/io5';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 export default function LoginFormComponent() {
+   const router = useRouter()
     const [state, dispatch] = useFormState(authenticate, undefined);
     useEffect(() => {
         if (state == 'Success') {
@@ -69,7 +72,7 @@ export default function LoginFormComponent() {
                     </div>
                     <p className="flex flex-col items-center justify-center mt-10 text-center text-md text-gray-500">
                         <span>¿No tienes una cuenta?</span>
-                        <a href="#" className="text-indigo-500 hover:text-indigo-500 no-underline hover:underline cursor-pointer transition ease-in duration-300">Regístrate</a>
+                        <Link href={`/auth/registro`} className="text-indigo-500 hover:text-indigo-500 no-underline hover:underline cursor-pointer transition ease-in duration-300">Regístrate</Link>
                     </p>
                     {state === "CredentialsSignin" && (
                         <div className='flex gap-2'>
