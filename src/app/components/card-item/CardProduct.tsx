@@ -36,8 +36,8 @@ export default function CardProductComponent({ product }: Props) {
     return (
         <div className='w-full'>
             <Image
-                onMouseEnter={() => setDisplayImage(img2)}
-                onMouseLeave={() => setDisplayImage(img1)}
+                onMouseEnter={() => setDisplayImage(img1)}
+                onMouseLeave={() => setDisplayImage(img2)}
                 className='w-full'
                 src={displayImage} alt='s' width={300} height={300}></Image>
             <div className='text-center pl-3 pr-3 pb-3'>
