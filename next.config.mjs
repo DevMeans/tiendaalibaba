@@ -24,7 +24,10 @@ const nextConfig = {
     }
       
     ],
-  }
+  },
+  serverActions: {
+    bodySizeLimit: '5mb', // Aumenta el límite a 10 MB
+  },
 };
 
 export default nextConfig;
