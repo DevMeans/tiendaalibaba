@@ -93,7 +93,7 @@ export default function SidebarComponent({ sidebar }: Props) {
             )}
             <div className={clsx("fixed p-5 right-0 top-0 w-[300px] lg:w-[500px] h-screen bg-white z-20 shadow-2xl transform transition-all duration-300", {
                 "translate-x-full": !isSideMenuOpen
-            })}>
+            })} style={{ overflowY: "auto" }}>
                 <div className="">
                     <div className="flex justify-between items-center">
                         <p className="text-base font-semibold">Seleccione variaciones y cantidad</p>
